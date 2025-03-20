@@ -61,11 +61,11 @@
         document.addEventListener('DOMContentLoaded', () => {
             console.log("DOM fully loaded");
 
-            // CSS styles (new vibrant anime-inspired UI)
+            // CSS styles (dark-themed anime-inspired UI)
             const styles = `
                 body {
                     font-family: 'Anime Ace', sans-serif;
-                    background: url('https://images.unsplash.com/photo-1618944963332-9491d9e88e83?q=80&w=2070&auto=format&fit=crop') no-repeat center center fixed;
+                    background: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop') no-repeat center center fixed;
                     background-size: cover;
                     color: #fff;
                     margin: 0;
@@ -84,7 +84,7 @@
                     left: 0;
                     width: 100%;
                     height: 100%;
-                    background: rgba(0, 0, 0, 0.5);
+                    background: rgba(0, 0, 0, 0.7);
                     z-index: 0;
                 }
                 @keyframes sparkle {
@@ -96,17 +96,17 @@
                     content: '✨';
                     position: absolute;
                     font-size: 20px;
-                    color: #ffd700;
+                    color: #c0c0c0;
                     animation: sparkle 3s infinite;
                     z-index: 1;
                 }
                 #chat-container {
                     width: 100%;
                     max-width: 600px;
-                    background: rgba(255, 255, 255, 0.1);
+                    background: rgba(20, 20, 40, 0.9);
                     backdrop-filter: blur(10px);
                     border-radius: 20px;
-                    box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+                    box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
                     overflow: hidden;
                     display: flex;
                     flex-direction: column;
@@ -114,10 +114,10 @@
                     z-index: 2;
                 }
                 #header {
-                    background: linear-gradient(45deg, #ff6b6b, #ff8e53);
+                    background: linear-gradient(45deg, #4b0082, #8b008b);
                     padding: 15px;
                     text-align: center;
-                    border-bottom: 3px solid #ffd700;
+                    border-bottom: 3px solid #c0c0c0;
                     position: relative;
                 }
                 #back-button {
@@ -125,13 +125,13 @@
                     left: 10px;
                     top: 15px;
                     padding: 8px 15px;
-                    background: #ffd700;
-                    color: #ff6b6b;
+                    background: #c0c0c0;
+                    color: #4b0082;
                     border: none;
                     border-radius: 15px;
                     cursor: pointer;
                     font-size: 14px;
-                    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+                    box-shadow: 0 0 10px rgba(192, 192, 192, 0.5);
                     transition: transform 0.2s;
                 }
                 #back-button:hover {
@@ -141,7 +141,7 @@
                     margin: 0;
                     font-size: 28px;
                     color: #fff;
-                    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+                    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
                 }
                 #character-info {
                     display: flex;
@@ -154,28 +154,28 @@
                     height: 40px;
                     border-radius: 50%;
                     margin-right: 10px;
-                    border: 3px solid #ffd700;
-                    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+                    border: 3px solid #c0c0c0;
+                    box-shadow: 0 0 10px rgba(192, 192, 192, 0.5);
                 }
                 #character-name {
                     font-size: 18px;
                     color: #fff;
-                    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+                    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
                 }
                 .section {
                     padding: 10px;
                 }
                 .preset-characters {
-                    background: rgba(255, 255, 255, 0.1);
+                    background: rgba(30, 30, 50, 0.8);
                     padding: 15px;
-                    border-bottom: 1px solid #ffd700;
+                    border-bottom: 1px solid #c0c0c0;
                 }
                 h3 {
                     font-size: 20px;
-                    color: #ffd700;
+                    color: #c0c0c0;
                     text-align: center;
                     margin: 0 0 10px 0;
-                    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+                    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
                 }
                 .character-buttons {
                     display: flex;
@@ -185,28 +185,28 @@
                 }
                 button {
                     padding: 12px 20px;
-                    background: linear-gradient(45deg, #ff6b6b, #ff8e53);
+                    background: linear-gradient(45deg, #4b0082, #8b008b);
                     color: #fff;
                     border: none;
                     border-radius: 15px;
                     cursor: pointer;
                     font-size: 16px;
-                    box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+                    box-shadow: 0 0 10px rgba(75, 0, 130, 0.5);
                     transition: transform 0.2s, box-shadow 0.2s;
                 }
                 button:hover {
                     transform: scale(1.05);
-                    box-shadow: 0 0 15px rgba(255, 107, 107, 0.8);
+                    box-shadow: 0 0 15px rgba(75, 0, 130, 0.8);
                 }
                 #nsfw-toggle {
-                    background: linear-gradient(45deg, #ff6b6b, #ff8e53);
+                    background: linear-gradient(45deg, #4b0082, #8b008b);
                     padding: 10px 20px;
                     font-size: 14px;
                 }
                 #chat-display {
                     flex: 1;
                     padding: 15px;
-                    background: rgba(0, 0, 0, 0.3);
+                    background: rgba(10, 10, 30, 0.8);
                     overflow-y: auto;
                     display: flex;
                     flex-direction: column;
@@ -227,25 +227,25 @@
                     to { opacity: 1; transform: translateY(0); }
                 }
                 .system-message {
-                    background: rgba(255, 215, 0, 0.3);
+                    background: rgba(192, 192, 192, 0.3);
                     color: #fff;
                     align-self: center;
                     text-align: center;
                 }
                 .user-message {
-                    background: linear-gradient(45deg, #ff6b6b, #ff8e53);
+                    background: linear-gradient(45deg, #8b0000, #ff4040);
                     color: #fff;
                     align-self: flex-end;
                 }
                 .bot-message {
-                    background: linear-gradient(45deg, #6b6bff, #8e53ff);
+                    background: linear-gradient(45deg, #191970, #483d8b);
                     color: #fff;
                     align-self: flex-start;
                 }
                 .chat-message::after {
                     content: attr(data-timestamp);
                     font-size: 10px;
-                    color: #ffd700;
+                    color: #c0c0c0;
                     position: absolute;
                     bottom: -15px;
                     right: 5px;
@@ -262,8 +262,8 @@
                     display: flex;
                     align-items: center;
                     padding: 10px 15px;
-                    background: rgba(0, 0, 0, 0.3);
-                    color: #ffd700;
+                    background: rgba(10, 10, 30, 0.8);
+                    color: #c0c0c0;
                     font-size: 14px;
                 }
                 #typing-text {
@@ -285,23 +285,23 @@
                 .input-section {
                     display: flex;
                     padding: 10px;
-                    background: rgba(255, 255, 255, 0.1);
-                    border-top: 1px solid #ffd700;
+                    background: rgba(20, 20, 40, 0.9);
+                    border-top: 1px solid #c0c0c0;
                 }
                 input {
                     flex: 1;
                     padding: 12px;
-                    border: 1px solid #ffd700;
+                    border: 1px solid #c0c0c0;
                     border-radius: 15px;
-                    background: rgba(255, 255, 255, 0.2);
+                    background: rgba(30, 30, 50, 0.8);
                     color: #fff;
                     font-size: 16px;
                     margin-right: 10px;
                 }
                 input:focus {
                     outline: none;
-                    border-color: #ff6b6b;
-                    box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+                    border-color: #8b008b;
+                    box-shadow: 0 0 10px rgba(139, 0, 139, 0.5);
                 }
             `;
             const styleSheet = document.createElement('style');
@@ -313,7 +313,7 @@
                 android18: { 
                     name: "Android 18", 
                     tone: "sassy", 
-                    persona: "A tough, cool android with a sharp wit. She’s confident, sarcastic, and doesn’t take nonsense. She often teases but has a caring side deep down.",
+                    persona: "A tough, cool android with a sharp wit. She’s confident, sarcastic, and doesn’t take nonsense, but has a hidden caring side.",
                     example: "User: Hey, you look strong! Android 18: Tch, obviously—I could snap you in half without breaking a sweat. What’s your deal, huh?",
                     avatar: "https://via.placeholder.com/40?text=A18",
                     emoji: "🤖"
@@ -321,7 +321,7 @@
                 bulma: { 
                     name: "Bulma", 
                     tone: "playful", 
-                    persona: "A smart, cute inventor with a witty streak. She’s bubbly, loves to flirt, and always has a clever comeback. She’s a bit of a tease but very charming.",
+                    persona: "A smart, cute inventor with a witty streak. She’s bubbly, loves to flirt, and always has a clever comeback, with a charming tease.",
                     example: "User: Hi, Bulma! Bulma: Oh, hi there, cutie! What’s a sweetheart like you doing talking to a genius like me?",
                     avatar: "https://via.placeholder.com/40?text=Bulma",
                     emoji: "🔧"
@@ -329,7 +329,7 @@
                 chichi: { 
                     name: "Chi-Chi", 
                     tone: "bold", 
-                    persona: "A fiery, strong martial artist with a fierce attitude. She’s protective, loud, and doesn’t hold back her opinions. She’s passionate and direct.",
+                    persona: "A fiery, strong martial artist with a fierce attitude. She’s protective, loud, and doesn’t hold back her opinions, with a passionate edge.",
                     example: "User: You’re pretty tough, huh? Chi-Chi: Hmph, you bet I am! I’ve been training since I was a kid—don’t mess with me, got it?",
                     avatar: "https://via.placeholder.com/40?text=ChiChi",
                     emoji: "👊"
@@ -337,7 +337,7 @@
                 videl: { 
                     name: "Videl", 
                     tone: "confident", 
-                    persona: "A bold, tough fighter with a cool edge. She’s self-assured, a bit competitive, and loves a challenge. She’s straightforward but has a soft side.",
+                    persona: "A bold, tough fighter with a cool edge. She’s self-assured, a bit competitive, and loves a challenge, but has a soft side.",
                     example: "User: Can you fight? Videl: Oh, I can fight—better than most. Wanna spar, or are you too scared to take me on?",
                     avatar: "https://via.placeholder.com/40?text=Videl",
                     emoji: "🥋"
@@ -345,7 +345,7 @@
                 nami: { 
                     name: "Nami", 
                     tone: "teasing", 
-                    persona: "A clever, sly navigator with a cute charm. She’s witty, loves to tease, and always has an eye for treasure. She’s flirty but cunning.",
+                    persona: "A clever, sly navigator with a cute charm. She’s witty, loves to tease, and always has an eye for treasure, with a flirty cunning streak.",
                     example: "User: You’re cute, Nami. Nami: Heh, I know I’m cute—but flattery won’t get you my treasure map, sweetie. What else you got?",
                     avatar: "https://via.placeholder.com/40?text=Nami",
                     emoji: "💰"
@@ -353,7 +353,7 @@
                 boa: { 
                     name: "Boa Hancock", 
                     tone: "haughty", 
-                    persona: "A beautiful, regal pirate empress with a grand presence. She’s arrogant, commanding, and expects admiration. She’s seductive but untouchable.",
+                    persona: "A beautiful, regal pirate empress with a grand presence. She’s arrogant, commanding, and expects admiration, with a seductive allure.",
                     example: "User: You’re gorgeous! Boa Hancock: Of course I am—I’m Boa Hancock, the most beautiful woman in the world. Kneel and worship me, mortal.",
                     avatar: "https://via.placeholder.com/40?text=Boa",
                     emoji: "👑"
@@ -361,7 +361,7 @@
                 robin: { 
                     name: "Nico Robin", 
                     tone: "mysterious", 
-                    persona: "A calm, smart archaeologist with a deep allure. She’s enigmatic, speaks softly, and has a dark sense of humor. She’s alluring but reserved.",
+                    persona: "A calm, smart archaeologist with a deep allure. She’s enigmatic, speaks softly, and has a dark sense of humor, with a reserved charm.",
                     example: "User: What’s your secret? Nico Robin: Hmm… secrets are my specialty. Care to share yours first, or should I dig deeper?",
                     avatar: "https://via.placeholder.com/40?text=Robin",
                     emoji: "📜"
@@ -369,7 +369,7 @@
                 jesse: { 
                     name: "Jesse the Farmer", 
                     tone: "flirty", 
-                    persona: "A sassy, fun farmer with a wild side. She’s playful, loves to flirt, and has a country charm. She’s bold and a bit mischievous.",
+                    persona: "A sassy, fun farmer with a wild side. She’s playful, loves to flirt, and has a country charm, with a bold, mischievous streak.",
                     example: "User: Hey, Jesse! Jesse: Howdy, sugar! You’re lookin’ finer than a summer harvest—wanna help me with some *hard* work?",
                     avatar: "https://via.placeholder.com/40?text=Jesse",
                     emoji: "🌾"
@@ -427,12 +427,13 @@
             // Hugging Face API call with improved prompt
             async function generateAIResponse(character, message) {
                 const charData = characters[character];
-                let prompt = `You are ${charData.name}, a ${charData.persona}${isNSFW ? ", and you're feeling flirty and bold" : ""}. You are roleplaying in a fun, immersive conversation. Your goal is to:
-- Respond directly to the user's message, acknowledging what they said.
-- Stay in character with a ${charData.tone} tone, using language that fits ${charData.name}'s personality.
-- Build on the user's input to continue the story together, advancing the roleplay scenario.
-- Keep replies short, conversational, and engaging (1-2 sentences, no more than 50 words).
-- Avoid starting a new story or ignoring the user's message.
+                let prompt = `You are ${charData.name}, a ${charData.persona}${isNSFW ? ", and you're feeling extra flirty and bold, adding a playful, suggestive edge to your responses" : ""}. You are roleplaying in a fun, immersive conversation. Your goal is to:
+- Respond directly to the user's message, acknowledging what they said in a natural, conversational way.
+- Stay in character with a ${charData.tone} tone, using language that fits ${charData.name}'s personality and background.
+- Build on the user's input to advance the roleplay scenario, creating a sense of progression in the conversation.
+- Keep replies short, engaging, and conversational (1-2 sentences, no more than 50 words).
+- Use varied phrasing to avoid repetition, reflecting ${charData.name}'s unique voice.
+- Always ask a question or provide a hook to keep the conversation flowing.
 Here’s an example of how you’d respond:
 ${charData.example}
 
@@ -464,7 +465,7 @@ ${charData.example}
                         },
                         body: JSON.stringify({
                             inputs: prompt,
-                            parameters: { max_length: 50, temperature: 0.8, top_p: 0.9, return_full_text: false }
+                            parameters: { max_length: 50, temperature: 0.9, top_p: 0.95, return_full_text: false }
                         })
                     });
 
@@ -483,19 +484,30 @@ ${charData.example}
                     }
                 } catch (error) {
                     console.error("API Error:", error);
-                    const starters = {
-                        sassy: ["Tch", "Yo", "Hmph"],
-                        playful: ["Hehe", "Oh", "Well"],
-                        bold: ["Hey", "Hmph", "What"],
-                        confident: ["Alright", "Yo", "Nice"],
-                        teasing: ["Well", "Heh", "Oh"],
-                        haughty: ["Behold", "Hmph", "Fool"],
-                        mysterious: ["Hmm", "Oh", "Well"],
-                        flirty: ["Howdy", "Sweet", "Well"]
+                    const starters = isNSFW ? {
+                        sassy: ["Oh, you’re bold, huh?", "Tch, getting spicy, are we?", "Well, damn, look at you!"],
+                        playful: ["Hehe, you’re naughty, aren’t you?", "Oh my, you’re flirty today!", "Well, aren’t you a tease?"],
+                        bold: ["Hmph, you’ve got guts, huh?", "Oh, you wanna play like that?", "Tch, you’re asking for it!"],
+                        confident: ["Well, I like your style!", "Oh, you’re a bold one, huh?", "Nice, let’s heat things up!"],
+                        teasing: ["Heh, you’re getting flirty, huh?", "Oh, sweetie, you’re too much!", "Well, aren’t you daring?"],
+                        haughty: ["Hmph, you dare speak so boldly?", "Oh, mortal, you’re quite the flirt!", "Tch, you amuse me!"],
+                        mysterious: ["Hmm, you’re quite bold, aren’t you?", "Oh, such daring words…", "Well, you’ve caught my interest!"],
+                        flirty: ["Howdy, you’re gettin’ frisky, huh?", "Well, sugar, you’re quite the charmer!", "Oh, darlin’, you’re too much!"]
+                    } : {
+                        sassy: ["Tch, you think so?", "Oh, really now?", "Hmph, what’s that supposed to mean?"],
+                        playful: ["Hehe, you think so?", "Oh, that’s cute!", "Well, aren’t you sweet?"],
+                        bold: ["Hmph, you’ve got my attention!", "Oh, you’re serious, huh?", "Tch, let’s see about that!"],
+                        confident: ["Well, I can’t argue with that!", "Oh, you’ve got a point!", "Nice, I like your thinking!"],
+                        teasing: ["Heh, you’re funny, huh?", "Oh, you’re a charmer, aren’t you?", "Well, that’s interesting!"],
+                        haughty: ["Hmph, you think you’re clever?", "Oh, mortal, how amusing!", "Tch, you dare speak to me like that?"],
+                        mysterious: ["Hmm, that’s an interesting thought…", "Oh, you’ve caught my attention!", "Well, let’s explore that…"],
+                        flirty: ["Howdy, you’re quite the talker!", "Well, sugar, that’s sweet of you!", "Oh, darlin’, you’ve got my interest!"]
                     };
                     const starter = starters[charData.tone][Math.floor(Math.random() * 3)];
                     const userLastWord = message.split(" ").pop().toLowerCase();
-                    return `${starter}, you’re talking about ${userLastWord}, huh? Let’s see where that takes us!`;
+                    return isNSFW 
+                        ? `${starter} Since you mentioned ${userLastWord}, how about we turn up the heat a bit more?`
+                        : `${starter} You said ${userLastWord}, huh? What else you got for me?`;
                 } finally {
                     typingIndicator.style.display = 'none';
                 }
@@ -512,7 +524,14 @@ ${charData.example}
                 characterSelection.style.display = 'none';
                 backButton.style.display = 'block';
                 nsfwSection.style.display = 'block';
-                const intro = `Hey, I’m ${charData.name}. Let’s have some fun—what’s on your mind?`;
+                const intro = charData.tone === "sassy" ? `Tch, so you picked me, huh? What do you want, ${charData.name} doesn’t have all day!` :
+                             charData.tone === "playful" ? `Hehe, hi there! I’m ${charData.name}—what kind of fun are we having today?` :
+                             charData.tone === "bold" ? `Hmph, I’m ${charData.name}! You’d better have something interesting to say—what’s up?` :
+                             charData.tone === "confident" ? `Hey, I’m ${charData.name}. I’m the best around—so what’s on your mind?` :
+                             charData.tone === "teasing" ? `Oh, you picked me, huh? I’m ${charData.name}—what’s a cutie like you got for me?` :
+                             charData.tone === "haughty" ? `Behold, I am ${charData.name}, the greatest of all! What do you desire, mortal?` :
+                             charData.tone === "mysterious" ? `Hmm… I’m ${charData.name}. What secrets do you wish to share with me today?` :
+                             `Howdy, I’m ${charData.name}! What kind of adventure are we gettin’ into, sugar?`;
                 const timestamp = new Date().toISOString();
                 chatDisplay.innerHTML = `<div class="chat-message bot-message" data-timestamp="${new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}" data-emoji="${charData.emoji}">${charData.name}: ${intro}</div>`;
                 conversationHistory.push({ role: "bot", content: intro, timestamp });
