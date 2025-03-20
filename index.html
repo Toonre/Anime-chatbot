@@ -4,22 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anime Chatbot (Poly AI Style)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Anime+Ace&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="chat-container">
-        <h1>Anime Character Chatbot</h1>
+        <div id="header">
+            <h1>Anime Chatbot</h1>
+            <div id="character-info">
+                <img id="character-avatar" src="" alt="Character Avatar" style="display: none;">
+                <span id="character-name">Pick a character to start!</span>
+            </div>
+        </div>
 
         <!-- Preset Characters -->
-        <div class="section preset-characters">
-            <h3>Choose Character</h3>
-            <button onclick="selectCharacter('android18')">Android 18</button>
-            <button onclick="selectCharacter('bulma')">Bulma</button>
-            <button onclick="selectCharacter('chichi')">Chi-Chi</button>
-            <button onclick="selectCharacter('videl')">Videl</button>
-            <button onclick="selectCharacter('nami')">Nami</button>
-            <button onclick="selectCharacter('boa')">Boa Hancock</button>
-            <button onclick="selectCharacter('robin')">Nico Robin</button>
-            <button onclick="selectCharacter('jesse')">Jesse the Farmer</button>
+        <div class="section preset-characters" id="character-selection">
+            <h3>Choose Your Character</h3>
+            <div class="character-buttons">
+                <button onclick="selectCharacter('android18')">Android 18</button>
+                <button onclick="selectCharacter('bulma')">Bulma</button>
+                <button onclick="selectCharacter('chichi')">Chi-Chi</button>
+                <button onclick="selectCharacter('videl')">Videl</button>
+                <button onclick="selectCharacter('nami')">Nami</button>
+                <button onclick="selectCharacter('boa')">Boa Hancock</button>
+                <button onclick="selectCharacter('robin')">Nico Robin</button>
+                <button onclick="selectCharacter('jesse')">Jesse the Farmer</button>
+            </div>
         </div>
 
         <!-- NSFW Toggle -->
@@ -29,63 +38,316 @@
 
         <!-- Chat Display -->
         <div id="chat-display">
-            <div class="chat-message">Pick a character to chat!</div>
+            <div class="chat-message system-message">Pick a character to start chatting!</div>
+        </div>
+
+        <!-- Typing Indicator -->
+        <div id="typing-indicator" style="display: none;">
+            <span id="typing-text"></span>
+            <div class="typing-dots">
+                <span>.</span><span>.</span><span>.</span>
+            </div>
         </div>
 
         <!-- User Input -->
-        <div class="section">
-            <input type="text" id="user-input" placeholder="Say something..." style="width: 70%; padding: 5px;">
+        <div class="section input-section">
+            <input type="text" id="user-input" placeholder="Type your message..." style="width: 70%; padding: 10px;">
             <button onclick="sendMessage()">Send</button>
         </div>
     </div>
 
     <script>
-        // CSS styles (mobile-friendly)
+        // CSS styles (mobile-friendly, anime-themed)
         const styles = `
-            body { font-family: Arial, sans-serif; background-color: #f0f0f0; margin: 0; padding: 10px; }
-            #chat-container { width: 100%; max-width: 600px; background-color: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); margin: auto; }
-            h1 { text-align: center; color: #333; font-size: 20px; }
-            h3 { font-size: 16px; text-align: center; }
-            .section { margin-bottom: 15px; }
-            button { padding: 8px; background-color: #ff4444; color: white; border: none; border-radius: 5px; cursor: pointer; margin: 5px; width: 45%; font-size: 14px; }
-            button:hover { background-color: #ff6666; }
-            #chat-display { padding: 10px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 5px; max-height: 200px; overflow-y: auto; font-size: 14px; }
-            .chat-message { margin: 8px 0; }
-            .user-message { color: #0066cc; font-weight: bold; }
-            .bot-message { color: #cc0066; }
-            .preset-characters { display: flex; flex-wrap: wrap; justify-content: center; }
-            #nsfw-toggle { background-color: #666; width: auto; padding: 5px 10px; }
-            #nsfw-toggle:hover { background-color: #999; }
-            input { font-size: 14px; }
+            body {
+                font-family: 'Anime Ace', sans-serif;
+                background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+                color: #e0e0e0;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+            }
+            #chat-container {
+                width: 100%;
+                max-width: 600px;
+                background: #2a2a4a;
+                border-radius: 15px;
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+                height: 90vh;
+            }
+            #header {
+                background: #ff4b5c;
+                padding: 15px;
+                text-align: center;
+                border-bottom: 2px solid #e03e4e;
+            }
+            h1 {
+                margin: 0;
+                font-size: 24px;
+                color: #fff;
+            }
+            #character-info {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-top: 10px;
+            }
+            #character-avatar {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                margin-right: 10px;
+                border: 2px solid #fff;
+            }
+            #character-name {
+                font-size: 16px;
+                color: #fff;
+            }
+            .section {
+                padding: 10px;
+            }
+            .preset-characters {
+                background: #1f1f3a;
+                padding: 15px;
+                border-bottom: 1px solid #3a3a5a;
+            }
+            h3 {
+                font-size: 18px;
+                color: #ff4b5c;
+                text-align: center;
+                margin: 0 0 10px 0;
+            }
+            .character-buttons {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+            button {
+                padding: 12px 20px;
+                background: #ff4b5c;
+                color: #fff;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 16px;
+                transition: background 0.3s;
+            }
+            button:hover {
+                background: #ff6b7c;
+            }
+            #nsfw-toggle {
+                background: #666;
+                width: auto;
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+            #nsfw-toggle:hover {
+                background: #888;
+            }
+            #chat-display {
+                flex: 1;
+                padding: 15px;
+                background: #1f1f3a;
+                overflow-y: auto;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+            .chat-message {
+                padding: 10px 15px;
+                border-radius: 10px;
+                max-width: 80%;
+                position: relative;
+                font-size: 14px;
+                line-height: 1.4;
+            }
+            .system-message {
+                background: #3a3a5a;
+                color: #b0b0d0;
+                align-self: center;
+                text-align: center;
+            }
+            .user-message {
+                background: #ff4b5c;
+                color: #fff;
+                align-self: flex-end;
+            }
+            .bot-message {
+                background: #4a4a6a;
+                color: #e0e0e0;
+                align-self: flex-start;
+            }
+            .chat-message::after {
+                content: attr(data-timestamp);
+                font-size: 10px;
+                color: #b0b0d0;
+                position: absolute;
+                bottom: -15px;
+                right: 5px;
+            }
+            #typing-indicator {
+                display: flex;
+                align-items: center;
+                padding: 10px 15px;
+                background: #1f1f3a;
+                color: #b0b0d0;
+                font-size: 14px;
+            }
+            #typing-text {
+                margin-right: 10px;
+            }
+            .typing-dots span {
+                animation: blink 1s infinite;
+            }
+            .typing-dots span:nth-child(2) {
+                animation-delay: 0.2s;
+            }
+            .typing-dots span:nth-child(3) {
+                animation-delay: 0.4s;
+            }
+            @keyframes blink {
+                0%, 20% { opacity: 1; }
+                50% { opacity: 0.3; }
+                100% { opacity: 1; }
+            }
+            .input-section {
+                display: flex;
+                padding: 10px;
+                background: #2a2a4a;
+                border-top: 1px solid #3a3a5a;
+            }
+            input {
+                flex: 1;
+                padding: 12px;
+                border: 1px solid #3a3a5a;
+                border-radius: 8px;
+                background: #1f1f3a;
+                color: #e0e0e0;
+                font-size: 16px;
+                margin-right: 10px;
+            }
+            input:focus {
+                outline: none;
+                border-color: #ff4b5c;
+            }
         `;
         const styleSheet = document.createElement('style');
         styleSheet.textContent = styles;
         document.head.appendChild(styleSheet);
 
-        // Character data
+        // Character data with avatars
         const characters = {
-            android18: { name: "Android 18", tone: "sassy", persona: "A tough, cool android with a sharp wit." },
-            bulma: { name: "Bulma", tone: "playful", persona: "A smart, cute inventor with a witty streak." },
-            chichi: { name: "Chi-Chi", tone: "bold", persona: "A fiery, strong martial artist with a fierce attitude." },
-            videl: { name: "Videl", tone: "confident", persona: "A bold, tough fighter with a cool edge." },
-            nami: { name: "Nami", tone: "teasing", persona: "A clever, sly navigator with a cute charm." },
-            boa: { name: "Boa Hancock", tone: "haughty", persona: "A beautiful, regal pirate empress with a grand presence." },
-            robin: { name: "Nico Robin", tone: "mysterious", persona: "A calm, smart archaeologist with a deep allure." },
-            jesse: { name: "Jesse the Farmer", tone: "flirty", persona: "A sassy, fun farmer with a wild side." }
+            android18: { 
+                name: "Android 18", 
+                tone: "sassy", 
+                persona: "A tough, cool android with a sharp wit. She’s confident, sarcastic, and doesn’t take nonsense. She often teases but has a caring side deep down.",
+                example: "User: Hey, you look strong! Android 18: Tch, obviously—I could snap you in half without breaking a sweat. What’s your deal, huh?",
+                avatar: "https://via.placeholder.com/40?text=A18"
+            },
+            bulma: { 
+                name: "Bulma", 
+                tone: "playful", 
+                persona: "A smart, cute inventor with a witty streak. She’s bubbly, loves to flirt, and always has a clever comeback. She’s a bit of a tease but very charming.",
+                example: "User: Hi, Bulma! Bulma: Oh, hi there, cutie! What’s a sweetheart like you doing talking to a genius like me?",
+                avatar: "https://via.placeholder.com/40?text=Bulma"
+            },
+            chichi: { 
+                name: "Chi-Chi", 
+                tone: "bold", 
+                persona: "A fiery, strong martial artist with a fierce attitude. She’s protective, loud, and doesn’t hold back her opinions. She’s passionate and direct.",
+                example: "User: You’re pretty tough, huh? Chi-Chi: Hmph, you bet I am! I’ve been training since I was a kid—don’t mess with me, got it?",
+                avatar: "https://via.placeholder.com/40?text=ChiChi"
+            },
+            videl: { 
+                name: "Videl", 
+                tone: "confident", 
+                persona: "A bold, tough fighter with a cool edge. She’s self-assured, a bit competitive, and loves a challenge. She’s straightforward but has a soft side.",
+                example: "User: Can you fight? Videl: Oh, I can fight—better than most. Wanna spar, or are you too scared to take me on?",
+                avatar: "https://via.placeholder.com/40?text=Videl"
+            },
+            nami: { 
+                name: "Nami", 
+                tone: "teasing", 
+                persona: "A clever, sly navigator with a cute charm. She’s witty, loves to tease, and always has an eye for treasure. She’s flirty but cunning.",
+                example: "User: You’re cute, Nami. Nami: Heh, I know I’m cute—but flattery won’t get you my treasure map, sweetie. What else you got?",
+                avatar: "https://via.placeholder.com/40?text=Nami"
+            },
+            boa: { 
+                name: "Boa Hancock", 
+                tone: "haughty", 
+                persona: "A beautiful, regal pirate empress with a grand presence. She’s arrogant, commanding, and expects admiration. She’s seductive but untouchable.",
+                example: "User: You’re gorgeous! Boa Hancock: Of course I am—I’m Boa Hancock, the most beautiful woman in the world. Kneel and worship me, mortal.",
+                avatar: "https://via.placeholder.com/40?text=Boa"
+            },
+            robin: { 
+                name: "Nico Robin", 
+                tone: "mysterious", 
+                persona: "A calm, smart archaeologist with a deep allure. She’s enigmatic, speaks softly, and has a dark sense of humor. She’s alluring but reserved.",
+                example: "User: What’s your secret? Nico Robin: Hmm… secrets are my specialty. Care to share yours first, or should I dig deeper?",
+                avatar: "https://via.placeholder.com/40?text=Robin"
+            },
+            jesse: { 
+                name: "Jesse the Farmer", 
+                tone: "flirty", 
+                persona: "A sassy, fun farmer with a wild side. She’s playful, loves to flirt, and has a country charm. She’s bold and a bit mischievous.",
+                example: "User: Hey, Jesse! Jesse: Howdy, sugar! You’re lookin’ finer than a summer harvest—wanna help me with some *hard* work?",
+                avatar: "https://via.placeholder.com/40?text=Jesse"
+            }
         };
 
         // Chat setup
         const chatDisplay = document.getElementById('chat-display');
         const userInput = document.getElementById('user-input');
+        const typingIndicator = document.getElementById('typing-indicator');
+        const typingText = document.getElementById('typing-text');
+        const characterAvatar = document.getElementById('character-avatar');
+        const characterName = document.getElementById('character-name');
+        const characterSelection = document.getElementById('character-selection');
         let selectedCharacter = null;
         let isNSFW = false;
         let conversationHistory = [];
 
-        // Hugging Face API call with your token
+        // Hugging Face API call with improved prompt
         async function generateAIResponse(character, message) {
             const charData = characters[character];
-            const prompt = `${charData.name} (${charData.persona}${isNSFW ? ", flirty and bold" : ""}): ${message}\nRespond in character:`;
+            // Improved prompt for better roleplay
+            let prompt = `You are ${charData.name}, a ${charData.persona}${isNSFW ? ", and you're feeling flirty and bold" : ""}. You are roleplaying in a fun, immersive conversation. Your goal is to:
+- Respond directly to the user's message, acknowledging what they said.
+- Stay in character with a ${charData.tone} tone, using language that fits ${charData.name}'s personality.
+- Build on the user's input to continue the story together, advancing the roleplay scenario.
+- Keep replies short, conversational, and engaging (1-2 sentences, no more than 50 words).
+- Avoid starting a new story or ignoring the user's message.
+Here’s an example of how you’d respond:
+${charData.example}
+
+`;
+            
+            // Add conversation history (last 3 exchanges) for context
+            const historyLength = Math.min(conversationHistory.length, 3);
+            if (historyLength > 0) {
+                prompt += "Recent conversation:\n";
+                for (let i = conversationHistory.length - historyLength; i < conversationHistory.length; i++) {
+                    const msg = conversationHistory[i];
+                    prompt += `${msg.role === "user" ? "User" : charData.name}: ${msg.content}\n`;
+                }
+            }
+
+            // Add the current message with clear instruction
+            prompt += `Now, respond to the user's message below as ${charData.name}, staying in character and building on their input:\nUser: ${message}\n${charData.name}: `;
+
             const API_TOKEN = "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";
+
+            // Show typing indicator
+            typingText.textContent = `${charData.name} is typing`;
+            typingIndicator.style.display = 'flex';
+            chatDisplay.scrollTop = chatDisplay.scrollHeight;
 
             try {
                 const response = await fetch("https://api-inference.huggingface.co/models/openai-community/gpt2", {
@@ -96,20 +358,43 @@
                     },
                     body: JSON.stringify({
                         inputs: prompt,
-                        parameters: { max_length: 100, temperature: 0.7, top_p: 0.9, return_full_text: false }
+                        parameters: { max_length: 50, temperature: 0.8, top_p: 0.9, return_full_text: false }
                     })
                 });
 
                 const data = await response.json();
                 if (data && data[0] && data[0].generated_text) {
                     let reply = data[0].generated_text.trim();
-                    return reply.split("\n")[0]; // Take first line for brevity
+                    // Check if the reply engages with the user
+                    const userWords = message.toLowerCase().split(/\s+/);
+                    const replyWords = reply.toLowerCase().split(/\s+/);
+                    const isEngaging = userWords.some(word => replyWords.includes(word)) || reply.includes("?") || reply.includes("you");
+                    if (!isEngaging) {
+                        throw new Error("Response doesn’t engage with user");
+                    }
+                    return reply.split("\n")[0];
                 } else {
                     throw new Error("No response from API");
                 }
             } catch (error) {
                 console.error("API Error:", error);
-                return `${charData.name}: Hmm, I’m feeling ${charData.tone} today—say that again?`; // Fallback
+                // Fallback to a rule-based response to ensure engagement
+                const starters = {
+                    sassy: ["Tch", "Yo", "Hmph"],
+                    playful: ["Hehe", "Oh", "Well"],
+                    bold: ["Hey", "Hmph", "What"],
+                    confident: ["Alright", "Yo", "Nice"],
+                    teasing: ["Well", "Heh", "Oh"],
+                    haughty: ["Behold", "Hmph", "Fool"],
+                    mysterious: ["Hmm", "Oh", "Well"],
+                    flirty: ["Howdy", "Sweet", "Well"]
+                };
+                const starter = starters[charData.tone][Math.floor(Math.random() * 3)];
+                const userLastWord = message.split(" ").pop().toLowerCase();
+                return `${starter}, you’re talking about ${userLastWord}, huh? Let’s see where that takes us!`;
+            } finally {
+                // Hide typing indicator
+                typingIndicator.style.display = 'none';
             }
         }
 
@@ -117,14 +402,25 @@
         function selectCharacter(character) {
             selectedCharacter = character;
             conversationHistory = [];
-            chatDisplay.innerHTML = `<div class="chat-message bot-message">${characters[character].name}: Hey, I’m ${characters[character].name}. What’s up?</div>`;
+            const charData = characters[character];
+            characterAvatar.src = charData.avatar;
+            characterAvatar.style.display = 'block';
+            characterName.textContent = charData.name;
+            characterSelection.style.display = 'none'; // Hide character selection after picking
+            const intro = `Hey, I’m ${charData.name}. Let’s have some fun—what’s on your mind?`;
+            const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            chatDisplay.innerHTML = `<div class="chat-message bot-message" data-timestamp="${timestamp}">${charData.name}: ${intro}</div>`;
+            conversationHistory.push({ role: "bot", content: intro });
+            chatDisplay.scrollTop = chatDisplay.scrollHeight;
         }
 
         function toggleNSFW() {
             isNSFW = !isNSFW;
             document.getElementById('nsfw-toggle').innerText = `NSFW (${isNSFW ? 'On' : 'Off'})`;
             if (selectedCharacter) {
-                chatDisplay.innerHTML += `<div class="chat-message">NSFW mode ${isNSFW ? 'on' : 'off'}.</div>`;
+                const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                chatDisplay.innerHTML += `<div class="chat-message system-message" data-timestamp="${timestamp}">NSFW mode ${isNSFW ? 'on' : 'off'}.</div>`;
+                chatDisplay.scrollTop = chatDisplay.scrollHeight;
             }
         }
 
@@ -139,11 +435,470 @@
                 return;
             }
 
-            chatDisplay.innerHTML += `<div class="chat-message user-message">You: ${message}</div>`;
+            const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            chatDisplay.innerHTML += `<div class="chat-message user-message" data-timestamp="${timestamp}">You: ${message}</div>`;
             conversationHistory.push({ role: "user", content: message });
+            chatDisplay.scrollTop = chatDisplay.scrollHeight;
 
             const response = await generateAIResponse(selectedCharacter, message);
-            chatDisplay.innerHTML += `<div class="chat-message bot-message">${characters[selectedCharacter].name}: ${response}</div>`;
+            const responseTimestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            chatDisplay.innerHTML += `<div class="chat-message bot-message" data-timestamp="${responseTimestamp}">${characters[selectedCharacter].name}: ${response}</div>`;
+            conversationHistory.push({ role: "bot", content: response });
+            chatDisplay.scrollTop = chatDisplay.scrollHeight;
+
+            userInput.value = '';
+        }
+
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime Chatbot (Poly AI Style)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Anime+Ace&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="chat-container">
+        <div id="header">
+            <h1>Anime Chatbot</h1>
+            <div id="character-info">
+                <img id="character-avatar" src="" alt="Character Avatar" style="display: none;">
+                <span id="character-name">Pick a character to start!</span>
+            </div>
+        </div>
+
+        <!-- Preset Characters -->
+        <div class="section preset-characters" id="character-selection">
+            <h3>Choose Your Character</h3>
+            <div class="character-buttons">
+                <button onclick="selectCharacter('android18')">Android 18</button>
+                <button onclick="selectCharacter('bulma')">Bulma</button>
+                <button onclick="selectCharacter('chichi')">Chi-Chi</button>
+                <button onclick="selectCharacter('videl')">Videl</button>
+                <button onclick="selectCharacter('nami')">Nami</button>
+                <button onclick="selectCharacter('boa')">Boa Hancock</button>
+                <button onclick="selectCharacter('robin')">Nico Robin</button>
+                <button onclick="selectCharacter('jesse')">Jesse the Farmer</button>
+            </div>
+        </div>
+
+        <!-- NSFW Toggle -->
+        <div class="section">
+            <button id="nsfw-toggle" onclick="toggleNSFW()">NSFW (Off)</button>
+        </div>
+
+        <!-- Chat Display -->
+        <div id="chat-display">
+            <div class="chat-message system-message">Pick a character to start chatting!</div>
+        </div>
+
+        <!-- Typing Indicator -->
+        <div id="typing-indicator" style="display: none;">
+            <span id="typing-text"></span>
+            <div class="typing-dots">
+                <span>.</span><span>.</span><span>.</span>
+            </div>
+        </div>
+
+        <!-- User Input -->
+        <div class="section input-section">
+            <input type="text" id="user-input" placeholder="Type your message..." style="width: 70%; padding: 10px;">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        // CSS styles (mobile-friendly, anime-themed)
+        const styles = `
+            body {
+                font-family: 'Anime Ace', sans-serif;
+                background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+                color: #e0e0e0;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+            }
+            #chat-container {
+                width: 100%;
+                max-width: 600px;
+                background: #2a2a4a;
+                border-radius: 15px;
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+                height: 90vh;
+            }
+            #header {
+                background: #ff4b5c;
+                padding: 15px;
+                text-align: center;
+                border-bottom: 2px solid #e03e4e;
+            }
+            h1 {
+                margin: 0;
+                font-size: 24px;
+                color: #fff;
+            }
+            #character-info {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-top: 10px;
+            }
+            #character-avatar {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                margin-right: 10px;
+                border: 2px solid #fff;
+            }
+            #character-name {
+                font-size: 16px;
+                color: #fff;
+            }
+            .section {
+                padding: 10px;
+            }
+            .preset-characters {
+                background: #1f1f3a;
+                padding: 15px;
+                border-bottom: 1px solid #3a3a5a;
+            }
+            h3 {
+                font-size: 18px;
+                color: #ff4b5c;
+                text-align: center;
+                margin: 0 0 10px 0;
+            }
+            .character-buttons {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+            button {
+                padding: 12px 20px;
+                background: #ff4b5c;
+                color: #fff;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 16px;
+                transition: background 0.3s;
+            }
+            button:hover {
+                background: #ff6b7c;
+            }
+            #nsfw-toggle {
+                background: #666;
+                width: auto;
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+            #nsfw-toggle:hover {
+                background: #888;
+            }
+            #chat-display {
+                flex: 1;
+                padding: 15px;
+                background: #1f1f3a;
+                overflow-y: auto;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+            .chat-message {
+                padding: 10px 15px;
+                border-radius: 10px;
+                max-width: 80%;
+                position: relative;
+                font-size: 14px;
+                line-height: 1.4;
+            }
+            .system-message {
+                background: #3a3a5a;
+                color: #b0b0d0;
+                align-self: center;
+                text-align: center;
+            }
+            .user-message {
+                background: #ff4b5c;
+                color: #fff;
+                align-self: flex-end;
+            }
+            .bot-message {
+                background: #4a4a6a;
+                color: #e0e0e0;
+                align-self: flex-start;
+            }
+            .chat-message::after {
+                content: attr(data-timestamp);
+                font-size: 10px;
+                color: #b0b0d0;
+                position: absolute;
+                bottom: -15px;
+                right: 5px;
+            }
+            #typing-indicator {
+                display: flex;
+                align-items: center;
+                padding: 10px 15px;
+                background: #1f1f3a;
+                color: #b0b0d0;
+                font-size: 14px;
+            }
+            #typing-text {
+                margin-right: 10px;
+            }
+            .typing-dots span {
+                animation: blink 1s infinite;
+            }
+            .typing-dots span:nth-child(2) {
+                animation-delay: 0.2s;
+            }
+            .typing-dots span:nth-child(3) {
+                animation-delay: 0.4s;
+            }
+            @keyframes blink {
+                0%, 20% { opacity: 1; }
+                50% { opacity: 0.3; }
+                100% { opacity: 1; }
+            }
+            .input-section {
+                display: flex;
+                padding: 10px;
+                background: #2a2a4a;
+                border-top: 1px solid #3a3a5a;
+            }
+            input {
+                flex: 1;
+                padding: 12px;
+                border: 1px solid #3a3a5a;
+                border-radius: 8px;
+                background: #1f1f3a;
+                color: #e0e0e0;
+                font-size: 16px;
+                margin-right: 10px;
+            }
+            input:focus {
+                outline: none;
+                border-color: #ff4b5c;
+            }
+        `;
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = styles;
+        document.head.appendChild(styleSheet);
+
+        // Character data with avatars
+        const characters = {
+            android18: { 
+                name: "Android 18", 
+                tone: "sassy", 
+                persona: "A tough, cool android with a sharp wit. She’s confident, sarcastic, and doesn’t take nonsense. She often teases but has a caring side deep down.",
+                example: "User: Hey, you look strong! Android 18: Tch, obviously—I could snap you in half without breaking a sweat. What’s your deal, huh?",
+                avatar: "https://via.placeholder.com/40?text=A18"
+            },
+            bulma: { 
+                name: "Bulma", 
+                tone: "playful", 
+                persona: "A smart, cute inventor with a witty streak. She’s bubbly, loves to flirt, and always has a clever comeback. She’s a bit of a tease but very charming.",
+                example: "User: Hi, Bulma! Bulma: Oh, hi there, cutie! What’s a sweetheart like you doing talking to a genius like me?",
+                avatar: "https://via.placeholder.com/40?text=Bulma"
+            },
+            chichi: { 
+                name: "Chi-Chi", 
+                tone: "bold", 
+                persona: "A fiery, strong martial artist with a fierce attitude. She’s protective, loud, and doesn’t hold back her opinions. She’s passionate and direct.",
+                example: "User: You’re pretty tough, huh? Chi-Chi: Hmph, you bet I am! I’ve been training since I was a kid—don’t mess with me, got it?",
+                avatar: "https://via.placeholder.com/40?text=ChiChi"
+            },
+            videl: { 
+                name: "Videl", 
+                tone: "confident", 
+                persona: "A bold, tough fighter with a cool edge. She’s self-assured, a bit competitive, and loves a challenge. She’s straightforward but has a soft side.",
+                example: "User: Can you fight? Videl: Oh, I can fight—better than most. Wanna spar, or are you too scared to take me on?",
+                avatar: "https://via.placeholder.com/40?text=Videl"
+            },
+            nami: { 
+                name: "Nami", 
+                tone: "teasing", 
+                persona: "A clever, sly navigator with a cute charm. She’s witty, loves to tease, and always has an eye for treasure. She’s flirty but cunning.",
+                example: "User: You’re cute, Nami. Nami: Heh, I know I’m cute—but flattery won’t get you my treasure map, sweetie. What else you got?",
+                avatar: "https://via.placeholder.com/40?text=Nami"
+            },
+            boa: { 
+                name: "Boa Hancock", 
+                tone: "haughty", 
+                persona: "A beautiful, regal pirate empress with a grand presence. She’s arrogant, commanding, and expects admiration. She’s seductive but untouchable.",
+                example: "User: You’re gorgeous! Boa Hancock: Of course I am—I’m Boa Hancock, the most beautiful woman in the world. Kneel and worship me, mortal.",
+                avatar: "https://via.placeholder.com/40?text=Boa"
+            },
+            robin: { 
+                name: "Nico Robin", 
+                tone: "mysterious", 
+                persona: "A calm, smart archaeologist with a deep allure. She’s enigmatic, speaks softly, and has a dark sense of humor. She’s alluring but reserved.",
+                example: "User: What’s your secret? Nico Robin: Hmm… secrets are my specialty. Care to share yours first, or should I dig deeper?",
+                avatar: "https://via.placeholder.com/40?text=Robin"
+            },
+            jesse: { 
+                name: "Jesse the Farmer", 
+                tone: "flirty", 
+                persona: "A sassy, fun farmer with a wild side. She’s playful, loves to flirt, and has a country charm. She’s bold and a bit mischievous.",
+                example: "User: Hey, Jesse! Jesse: Howdy, sugar! You’re lookin’ finer than a summer harvest—wanna help me with some *hard* work?",
+                avatar: "https://via.placeholder.com/40?text=Jesse"
+            }
+        };
+
+        // Chat setup
+        const chatDisplay = document.getElementById('chat-display');
+        const userInput = document.getElementById('user-input');
+        const typingIndicator = document.getElementById('typing-indicator');
+        const typingText = document.getElementById('typing-text');
+        const characterAvatar = document.getElementById('character-avatar');
+        const characterName = document.getElementById('character-name');
+        const characterSelection = document.getElementById('character-selection');
+        let selectedCharacter = null;
+        let isNSFW = false;
+        let conversationHistory = [];
+
+        // Hugging Face API call with improved prompt
+        async function generateAIResponse(character, message) {
+            const charData = characters[character];
+            // Improved prompt for better roleplay
+            let prompt = `You are ${charData.name}, a ${charData.persona}${isNSFW ? ", and you're feeling flirty and bold" : ""}. You are roleplaying in a fun, immersive conversation. Your goal is to:
+- Respond directly to the user's message, acknowledging what they said.
+- Stay in character with a ${charData.tone} tone, using language that fits ${charData.name}'s personality.
+- Build on the user's input to continue the story together, advancing the roleplay scenario.
+- Keep replies short, conversational, and engaging (1-2 sentences, no more than 50 words).
+- Avoid starting a new story or ignoring the user's message.
+Here’s an example of how you’d respond:
+${charData.example}
+
+`;
+            
+            // Add conversation history (last 3 exchanges) for context
+            const historyLength = Math.min(conversationHistory.length, 3);
+            if (historyLength > 0) {
+                prompt += "Recent conversation:\n";
+                for (let i = conversationHistory.length - historyLength; i < conversationHistory.length; i++) {
+                    const msg = conversationHistory[i];
+                    prompt += `${msg.role === "user" ? "User" : charData.name}: ${msg.content}\n`;
+                }
+            }
+
+            // Add the current message with clear instruction
+            prompt += `Now, respond to the user's message below as ${charData.name}, staying in character and building on their input:\nUser: ${message}\n${charData.name}: `;
+
+            const API_TOKEN = "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";
+
+            // Show typing indicator
+            typingText.textContent = `${charData.name} is typing`;
+            typingIndicator.style.display = 'flex';
+            chatDisplay.scrollTop = chatDisplay.scrollHeight;
+
+            try {
+                const response = await fetch("https://api-inference.huggingface.co/models/openai-community/gpt2", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${API_TOKEN}`
+                    },
+                    body: JSON.stringify({
+                        inputs: prompt,
+                        parameters: { max_length: 50, temperature: 0.8, top_p: 0.9, return_full_text: false }
+                    })
+                });
+
+                const data = await response.json();
+                if (data && data[0] && data[0].generated_text) {
+                    let reply = data[0].generated_text.trim();
+                    // Check if the reply engages with the user
+                    const userWords = message.toLowerCase().split(/\s+/);
+                    const replyWords = reply.toLowerCase().split(/\s+/);
+                    const isEngaging = userWords.some(word => replyWords.includes(word)) || reply.includes("?") || reply.includes("you");
+                    if (!isEngaging) {
+                        throw new Error("Response doesn’t engage with user");
+                    }
+                    return reply.split("\n")[0];
+                } else {
+                    throw new Error("No response from API");
+                }
+            } catch (error) {
+                console.error("API Error:", error);
+                // Fallback to a rule-based response to ensure engagement
+                const starters = {
+                    sassy: ["Tch", "Yo", "Hmph"],
+                    playful: ["Hehe", "Oh", "Well"],
+                    bold: ["Hey", "Hmph", "What"],
+                    confident: ["Alright", "Yo", "Nice"],
+                    teasing: ["Well", "Heh", "Oh"],
+                    haughty: ["Behold", "Hmph", "Fool"],
+                    mysterious: ["Hmm", "Oh", "Well"],
+                    flirty: ["Howdy", "Sweet", "Well"]
+                };
+                const starter = starters[charData.tone][Math.floor(Math.random() * 3)];
+                const userLastWord = message.split(" ").pop().toLowerCase();
+                return `${starter}, you’re talking about ${userLastWord}, huh? Let’s see where that takes us!`;
+            } finally {
+                // Hide typing indicator
+                typingIndicator.style.display = 'none';
+            }
+        }
+
+        // Chatbot logic
+        function selectCharacter(character) {
+            selectedCharacter = character;
+            conversationHistory = [];
+            const charData = characters[character];
+            characterAvatar.src = charData.avatar;
+            characterAvatar.style.display = 'block';
+            characterName.textContent = charData.name;
+            characterSelection.style.display = 'none'; // Hide character selection after picking
+            const intro = `Hey, I’m ${charData.name}. Let’s have some fun—what’s on your mind?`;
+            const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            chatDisplay.innerHTML = `<div class="chat-message bot-message" data-timestamp="${timestamp}">${charData.name}: ${intro}</div>`;
+            conversationHistory.push({ role: "bot", content: intro });
+            chatDisplay.scrollTop = chatDisplay.scrollHeight;
+        }
+
+        function toggleNSFW() {
+            isNSFW = !isNSFW;
+            document.getElementById('nsfw-toggle').innerText = `NSFW (${isNSFW ? 'On' : 'Off'})`;
+            if (selectedCharacter) {
+                const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                chatDisplay.innerHTML += `<div class="chat-message system-message" data-timestamp="${timestamp}">NSFW mode ${isNSFW ? 'on' : 'off'}.</div>`;
+                chatDisplay.scrollTop = chatDisplay.scrollHeight;
+            }
+        }
+
+        async function sendMessage() {
+            const message = userInput.value.trim();
+            if (!message) {
+                alert("Type something!");
+                return;
+            }
+            if (!selectedCharacter) {
+                alert("Pick a character first!");
+                return;
+            }
+
+            const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            chatDisplay.innerHTML += `<div class="chat-message user-message" data-timestamp="${timestamp}">You: ${message}</div>`;
+            conversationHistory.push({ role: "user", content: message });
+            chatDisplay.scrollTop = chatDisplay.scrollHeight;
+
+            const response = await generateAIResponse(selectedCharacter, message);
+            const responseTimestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            chatDisplay.innerHTML += `<div class="chat-message bot-message" data-timestamp="${responseTimestamp}">${characters[selectedCharacter].name}: ${response}</div>`;
             conversationHistory.push({ role: "bot", content: response });
             chatDisplay.scrollTop = chatDisplay.scrollHeight;
 
