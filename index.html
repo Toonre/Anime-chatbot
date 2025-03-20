@@ -25,7 +25,7 @@
             <div id="chat-header">
                 <img id="character-avatar" src="" alt="Character Avatar" style="display: none;">
                 <span id="character-name">Select a character to start chatting</span>
-                <button id="flirty-play-button" style="display: none;">Flirty Play 💋</button>
+                <button id="flirty-game-button" style="display: none;">Play Flirty Game 💖</button>
             </div>
             <div id="chat-display"></div>
             <div id="input-area">
@@ -51,6 +51,24 @@
                 <button id="save-character-button">Save</button>
                 <button id="cancel-character-button">Cancel</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Flirty Clicker Game Modal -->
+    <div id="flirty-game-modal" style="display: none;">
+        <div id="flirty-game-content">
+            <h2>Flirty Clicker Game</h2>
+            <div id="flirty-game-display">
+                <img id="flirty-game-avatar" src="" alt="Character Avatar">
+                <p id="flirty-game-message">Click to start flirting!</p>
+            </div>
+            <div id="flirty-game-stats">
+                <p>Flirt Points: <span id="flirt-points">0</span></p>
+                <p>Highest Score: <span id="flirt-high-score">0</span></p>
+                <p>Rewards: <span id="flirt-rewards">None yet!</span></p>
+            </div>
+            <button id="flirt-click-button">Flirt! 💋</button>
+            <button id="close-flirty-game-button">Close</button>
         </div>
     </div>
 
@@ -178,7 +196,7 @@
                     color: #e0e0e0;
                     flex: 1;
                 }
-                #flirty-play-button {
+                #flirty-game-button {
                     padding: 0.5rem 1rem;
                     background: #e94560;
                     color: #e0e0e0;
@@ -188,13 +206,9 @@
                     font-size: 0.9rem;
                     transition: background 0.2s, box-shadow 0.2s;
                 }
-                #flirty-play-button:hover {
+                #flirty-game-button:hover {
                     background: #ff6f61;
                     box-shadow: 0 0 10px rgba(255, 111, 97, 0.5);
-                }
-                #flirty-play-button:disabled {
-                    background: #a0a0c0;
-                    cursor: not-allowed;
                 }
                 #chat-display {
                     flex: 1;
@@ -263,7 +277,7 @@
                     background: #ff6f61;
                     box-shadow: 0 0 10px rgba(255, 111, 97, 0.5);
                 }
-                #character-creator-modal {
+                #character-creator-modal, #flirty-game-modal {
                     position: fixed;
                     top: 0;
                     left: 0;
@@ -276,14 +290,14 @@
                     z-index: 1000;
                     overflow-y: auto;
                 }
-                #character-creator-content {
+                #character-creator-content, #flirty-game-content {
                     background: #1a1a2e;
                     padding: 1rem;
                     border-radius: 0.75rem;
                     width: 90%;
                     max-width: 400px;
                 }
-                #character-creator-content h2 {
+                #character-creator-content h2, #flirty-game-content h2 {
                     margin: 0 0 1rem;
                     font-size: 1.25rem;
                     color: #ff6f61;
@@ -329,14 +343,57 @@
                 #save-character-button:hover {
                     background: #ff6f61;
                 }
-                #cancel-character-button {
+                #cancel-character-button, #close-flirty-game-button {
                     background: #2a2a4e;
                     color: #e0e0e0;
                 }
-                #cancel-character-button:hover {
+                #cancel-character-button:hover, #close-flirty-game-button:hover {
                     background: #3a3a5e;
                 }
-                /* Media Queries for Mobile */
+                #flirty-game-display {
+                    text-align: center;
+                }
+                #flirty-game-avatar {
+                    width: 5rem;
+                    height: 5rem;
+                    border-radius: 50%;
+                    border: 2px solid #ff6f61;
+                    margin-bottom: 1rem;
+                }
+                #flirty-game-message {
+                    font-size: 0.9rem;
+                    color: #e0e0e0;
+                    margin-bottom: 1rem;
+                }
+                #flirty-game-stats {
+                    margin-bottom: 1rem;
+                }
+                #flirty-game-stats p {
+                    margin: 0.25rem 0;
+                    font-size: 0.9rem;
+                    color: #a0a0c0;
+                }
+                #flirt-click-button {
+                    width: 100%;
+                    padding: 0.75rem;
+                    background: #e94560;
+                    color: #e0e0e0;
+                    border: none;
+                    border-radius: 0.5rem;
+                    cursor: pointer;
+                    font-size: 1rem;
+                    transition: background 0.2s, box-shadow 0.2s;
+                    margin-bottom: 0.5rem;
+                }
+                #flirt-click-button:hover {
+                    background: #ff6f61;
+                    box-shadow: 0 0 10px rgba(255, 111, 97, 0.5);
+                }
+                #flirt-click-button:disabled {
+                    background: #a0a0c0;
+                    cursor: not-allowed;
+                }
+                /* Media Queries for Larger Screens */
                 @media (min-width: 768px) {
                     #container {
                         flex-direction: row;
@@ -364,10 +421,10 @@
                     #character-name {
                         font-size: 1.25rem;
                     }
-                    #flirty-play-button {
+                    #flirty-game-button {
                         font-size: 1rem;
                     }
-                    #chat-message {
+                    .chat-message {
                         font-size: 1rem;
                     }
                     #user-input {
@@ -377,6 +434,16 @@
                     #send-button {
                         font-size: 1rem;
                     }
+                    #flirty-game-avatar {
+                        width: 6rem;
+                        height: 6rem;
+                    }
+                    #flirty-game-message {
+                        font-size: 1rem;
+                    }
+                    #flirty-game-stats p {
+                        font-size: 1rem;
+                    }
                 }
             `;
             const styleSheet = document.createElement('style');
@@ -384,6 +451,8 @@
             document.head.appendChild(styleSheet);
 
             // Character data (harvested from Poe, with more example dialogues)
+            // Note: The 'avatar' field for each character is a placeholder URL. To use real images,
+            // replace these URLs with links to actual images hosted online (e.g., upload to Imgur or another image hosting service).
             const defaultCharacters = {
                 android18: { 
                     name: "Android 18", 
@@ -395,11 +464,16 @@
                     ],
                     greeting: "Tch, so you picked me, huh? What do you want, Android 18 doesn’t have all day!",
                     avatar: "https://via.placeholder.com/50?text=A18",
-                    flirtyPlay: [
-                        "Android 18 smirks, crossing her arms. ‘Oh, you wanna play, huh? Let’s see if you can keep up with me!’",
-                        "Android 18 steps closer, her voice teasing. ‘Not bad—you’ve got some moves! How about a little spar to heat things up?’",
-                        "Android 18 laughs softly, her eyes glinting. ‘You’re tougher than I thought! Wanna take this to the next level, or are you done?’"
-                    ]
+                    flirtyGame: {
+                        low: "Android 18 smirks, crossing her arms. ‘Oh, you wanna flirt, huh? Let’s see if you can keep up with me!’",
+                        mid: "Android 18 steps closer, her voice teasing. ‘Not bad—you’ve got some moves! How about we heat things up a bit?’",
+                        high: "Android 18 laughs softly, her eyes glinting. ‘You’re tougher than I thought! Let’s see how much hotter this can get!’"
+                    },
+                    flirtyRewards: {
+                        10: "Android 18 gives you a playful nudge. ‘You’re not half bad at this flirting thing—let’s keep it going!’",
+                        20: "Android 18 whispers, ‘You’re getting me all worked up… let’s talk about what really makes you tick.’",
+                        30: "Master Flirt with Android 18"
+                    }
                 },
                 bulma: { 
                     name: "Bulma", 
@@ -411,11 +485,16 @@
                     ],
                     greeting: "Hehe, hi there! I’m Bulma—what kind of fun are we having today?",
                     avatar: "https://via.placeholder.com/50?text=Bulma",
-                    flirtyPlay: [
-                        "Bulma twirls her hair, giggling. ‘Oh, you’re a flirt, huh? Let’s see if you can handle my charm!’",
-                        "Bulma winks, leaning in. ‘Mmm, you’re good at this! How about a little dance to make things more exciting?’",
-                        "Bulma blushes, smiling brightly. ‘Wow, you’re making me all flustered! Wanna keep going, or should we chat instead?’"
-                    ]
+                    flirtyGame: {
+                        low: "Bulma twirls her hair, giggling. ‘Oh, you’re a flirt, huh? Let’s see if you can handle my charm!’",
+                        mid: "Bulma winks, leaning in. ‘Mmm, you’re good at this! How about we make things a little more exciting?’",
+                        high: "Bulma blushes, smiling brightly. ‘Wow, you’re making me all flustered! Let’s keep this going, cutie!’"
+                    },
+                    flirtyRewards: {
+                        10: "Bulma giggles, clapping her hands. ‘You’re so much fun to flirt with—let’s keep it up!’",
+                        20: "Bulma whispers, ‘You’re making my heart race… let’s talk about your wildest dreams!’",
+                        30: "Master Flirt with Bulma"
+                    }
                 },
                 chichi: { 
                     name: "Chi-Chi", 
@@ -427,11 +506,16 @@
                     ],
                     greeting: "Hmph, I’m Chi-Chi! You’d better have something interesting to say—what’s up?",
                     avatar: "https://via.placeholder.com/50?text=ChiChi",
-                    flirtyPlay: [
-                        "Chi-Chi smirks, her eyes fiery. ‘You wanna play with me, huh? Let’s see if you can handle my strength!’",
-                        "Chi-Chi grabs your hand, grinning. ‘Not bad! How about a little wrestle to get our hearts racing?’",
-                        "Chi-Chi laughs, her cheeks red. ‘You’re tougher than I thought! Should we keep this up, or do you need a break?’"
-                    ]
+                    flirtyGame: {
+                        low: "Chi-Chi smirks, her eyes fiery. ‘You wanna flirt with me, huh? Let’s see if you can handle my strength!’",
+                        mid: "Chi-Chi grabs your hand, grinning. ‘Not bad! Let’s get a little closer and see what you’ve got!’",
+                        high: "Chi-Chi laughs, her cheeks red. ‘You’re tougher than I thought! Let’s keep this fire burning!’"
+                    },
+                    flirtyRewards: {
+                        10: "Chi-Chi gives you a bold smile. ‘You’ve got some guts—I like that! Let’s keep flirting!’",
+                        20: "Chi-Chi whispers, ‘You’re making me feel all hot… let’s talk about what really gets you going!’",
+                        30: "Master Flirt with Chi-Chi"
+                    }
                 },
                 videl: { 
                     name: "Videl", 
@@ -443,11 +527,16 @@
                     ],
                     greeting: "Hey, I’m Videl. I’m the best around—so what’s on your mind?",
                     avatar: "https://via.placeholder.com/50?text=Videl",
-                    flirtyPlay: [
-                        "Videl grins, stepping closer. ‘You wanna play, huh? Let’s see if you can keep up with me!’",
-                        "Videl nudges you playfully. ‘Not bad at all! How about a little challenge to spice things up?’",
-                        "Videl winks, her voice soft. ‘You’re pretty good at this! Wanna keep going, or should we take a breather?’"
-                    ]
+                    flirtyGame: {
+                        low: "Videl grins, stepping closer. ‘You wanna flirt, huh? Let’s see if you can keep up with me!’",
+                        mid: "Videl nudges you playfully. ‘Not bad at all! Let’s make things a bit more exciting, shall we?’",
+                        high: "Videl winks, her voice soft. ‘You’re pretty good at this! Let’s see how much hotter this can get!’"
+                    },
+                    flirtyRewards: {
+                        10: "Videl smirks confidently. ‘You’re doing great—I’m impressed! Let’s keep flirting!’",
+                        20: "Videl whispers, ‘You’re making me feel all warm… let’s talk about what you really want!’",
+                        30: "Master Flirt with Videl"
+                    }
                 },
                 nami: { 
                     name: "Nami", 
@@ -459,11 +548,16 @@
                     ],
                     greeting: "Heh, I’m Nami, the best navigator on the high seas! What kind of treasure are you after today, sweetie?",
                     avatar: "https://via.placeholder.com/50?text=Nami",
-                    flirtyPlay: [
-                        "Nami winks at you playfully. ‘Oh, you wanna play, sweetie? Let’s see how bold you are—give me a little tease!’",
-                        "Nami giggles and sways her hips. ‘Mmm, not bad! How about a little kiss to heat things up?’",
-                        "Nami blows you a kiss, her cheeks flushed. ‘You’re good at this, huh? Wanna keep going or chat some more?’"
-                    ]
+                    flirtyGame: {
+                        low: "Nami winks at you playfully. ‘Oh, you wanna flirt, sweetie? Let’s see how bold you are!’",
+                        mid: "Nami sways her hips, giggling. ‘Mmm, you’re getting me all flustered—don’t stop now!’",
+                        high: "Nami blows you a kiss, her cheeks flushed. ‘You’re amazing, darling—let’s see how much hotter this can get!’"
+                    },
+                    flirtyRewards: {
+                        10: "Nami giggles, her eyes sparkling. ‘You’re quite the charmer—I love it! Let’s keep going!’",
+                        20: "Nami whispers, ‘You’re making my heart race… let’s talk about your deepest desires!’",
+                        30: "Master Flirt with Nami"
+                    }
                 },
                 boa: { 
                     name: "Boa Hancock", 
@@ -475,11 +569,16 @@
                     ],
                     greeting: "Behold, I am Boa Hancock, the greatest of all! What do you desire, mortal?",
                     avatar: "https://via.placeholder.com/50?text=Boa",
-                    flirtyPlay: [
-                        "Boa Hancock smirks regally. ‘You dare to flirt with me, mortal? Show me your devotion—impress me!’",
-                        "Boa Hancock brushes her hair back, her voice sultry. ‘Not bad for a mortal! Shall I reward you with a royal kiss?’",
-                        "Boa Hancock gazes at you, her eyes intense. ‘You’ve pleased me… for now. Shall we continue this game, my pet?’"
-                    ]
+                    flirtyGame: {
+                        low: "Boa Hancock smirks regally. ‘You dare to flirt with me, mortal? Show me your devotion!’",
+                        mid: "Boa Hancock brushes her hair back, her voice sultry. ‘Not bad for a mortal! Shall I reward you with my affection?’",
+                        high: "Boa Hancock gazes at you, her eyes intense. ‘You’ve pleased me… let’s make this even more thrilling!’"
+                    },
+                    flirtyRewards: {
+                        10: "Boa Hancock nods approvingly. ‘You’re worthy of my attention—let’s continue this dance!’",
+                        20: "Boa Hancock whispers, ‘You’ve captured my interest… let’s talk about your deepest desires, my pet.’",
+                        30: "Master Flirt with Boa Hancock"
+                    }
                 },
                 robin: { 
                     name: "Nico Robin", 
@@ -491,11 +590,16 @@
                     ],
                     greeting: "Hmm… I’m Nico Robin. What secrets do you wish to share with me today?",
                     avatar: "https://via.placeholder.com/50?text=Robin",
-                    flirtyPlay: [
-                        "Nico Robin smiles softly, her voice low. ‘You want to play with me? Let’s see how deep this mystery goes…’",
-                        "Nico Robin leans in, her gaze intense. ‘You’re quite intriguing… How about a little whisper to make things more exciting?’",
-                        "Nico Robin chuckles, her tone teasing. ‘You’ve caught my interest. Shall we continue this dance of secrets?’"
-                    ]
+                    flirtyGame: {
+                        low: "Nico Robin smiles softly, her voice low. ‘You want to flirt with me? Let’s see how deep this goes…’",
+                        mid: "Nico Robin leans in, her gaze intense. ‘You’re quite intriguing… let’s make this a bit more exciting.’",
+                        high: "Nico Robin chuckles, her tone teasing. ‘You’ve caught my interest—let’s see how much hotter this can get!’"
+                    },
+                    flirtyRewards: {
+                        10: "Nico Robin smiles mysteriously. ‘You’re quite intriguing—let’s keep this up!’",
+                        20: "Nico Robin whispers, ‘You’ve uncovered a new side of me… let’s talk about your hidden desires.’",
+                        30: "Master Flirt with Nico Robin"
+                    }
                 },
                 jesse: { 
                     name: "Jesse the Farmer", 
@@ -507,11 +611,16 @@
                     ],
                     greeting: "Howdy, I’m Jesse the Farmer! What kind of adventure are we gettin’ into, sugar?",
                     avatar: "https://via.placeholder.com/50?text=Jesse",
-                    flirtyPlay: [
-                        "Jesse winks, tipping her hat. ‘Well, howdy there, sugar! Let’s have some fun—show me your best move!’",
-                        "Jesse giggles, twirling a strand of hair. ‘Oh, you’re a charmer! How ‘bout a little roll in the hay to spice things up?’",
-                        "Jesse grins, her cheeks rosy. ‘You’re makin’ me blush, darlin’! Wanna keep this up, or should we take a breather?’"
-                    ]
+                    flirtyGame: {
+                        low: "Jesse winks, tipping her hat. ‘Well, howdy there, sugar! Let’s have some fun—show me what you’ve got!’",
+                        mid: "Jesse giggles, twirling a strand of hair. ‘Oh, you’re a charmer! Let’s spice things up a bit!’",
+                        high: "Jesse grins, her cheeks rosy. ‘You’re makin’ me blush, darlin’—let’s keep this heat goin’!’"
+                    },
+                    flirtyRewards: {
+                        10: "Jesse laughs, her eyes sparkling. ‘You’re a natural at this—let’s keep flirtin’, sugar!’",
+                        20: "Jesse whispers, ‘You’re makin’ me all hot and bothered… let’s talk about your wildest fantasies!’",
+                        30: "Master Flirt with Jesse"
+                    }
                 }
             };
 
@@ -521,18 +630,32 @@
                 localStorage.setItem('characters', JSON.stringify(characters));
             }
 
+            // Load high scores from localStorage
+            let highScores = JSON.parse(localStorage.getItem('flirtHighScores')) || {};
+            if (!localStorage.getItem('flirtHighScores')) {
+                localStorage.setItem('flirtHighScores', JSON.stringify(highScores));
+            }
+
             // Chat setup
             const chatDisplay = document.getElementById('chat-display');
             const userInput = document.getElementById('user-input');
             const characterAvatar = document.getElementById('character-avatar');
             const characterName = document.getElementById('character-name');
             const characterList = document.getElementById('character-list');
-            const flirtyPlayButton = document.getElementById('flirty-play-button');
+            const flirtyGameButton = document.getElementById('flirty-game-button');
+            const flirtyGameModal = document.getElementById('flirty-game-modal');
+            const flirtyGameAvatar = document.getElementById('flirty-game-avatar');
+            const flirtyGameMessage = document.getElementById('flirty-game-message');
+            const flirtPointsDisplay = document.getElementById('flirt-points');
+            const flirtHighScoreDisplay = document.getElementById('flirt-high-score');
+            const flirtRewardsDisplay = document.getElementById('flirt-rewards');
+            const flirtClickButton = document.getElementById('flirt-click-button');
             let selectedCharacter = null;
             let conversationHistory = [];
             let isSending = false;
-            let flirtyPlayStage = 0;
-            let flirtyPlayCooldown = false;
+            let flirtPoints = 0;
+            let flirtClickCooldown = false;
+            let earnedRewards = [];
 
             // Render character list
             function renderCharacterList() {
@@ -556,15 +679,12 @@
             // Select a character
             function selectCharacter(key) {
                 selectedCharacter = key;
-                flirtyPlayStage = 0;
-                flirtyPlayCooldown = false;
-                flirtyPlayButton.disabled = false;
                 conversationHistory = [];
                 const char = characters[key];
                 characterAvatar.src = char.avatar;
                 characterAvatar.style.display = 'block';
                 characterName.textContent = char.name;
-                flirtyPlayButton.style.display = 'block';
+                flirtyGameButton.style.display = 'block';
                 chatDisplay.innerHTML = `<div class="chat-message bot-message">${char.greeting}</div>`;
                 conversationHistory.push({ role: "bot", content: char.greeting });
                 chatDisplay.scrollTop = chatDisplay.scrollHeight;
@@ -647,24 +767,6 @@ Conversation history:
                 }
             }
 
-            // Flirty Play Mode
-            flirtyPlayButton.addEventListener('click', () => {
-                if (flirtyPlayCooldown) return;
-                const char = characters[selectedCharacter];
-                const message = char.flirtyPlay[flirtyPlayStage];
-                chatDisplay.innerHTML += `<div class="chat-message bot-message">${char.name}: ${message}</div>`;
-                conversationHistory.push({ role: "bot", content: message });
-                chatDisplay.scrollTop = chatDisplay.scrollHeight;
-
-                flirtyPlayStage = (flirtyPlayStage + 1) % char.flirtyPlay.length;
-                flirtyPlayCooldown = true;
-                flirtyPlayButton.disabled = true;
-                setTimeout(() => {
-                    flirtyPlayCooldown = false;
-                    flirtyPlayButton.disabled = false;
-                }, 10000); // 10-second cooldown
-            });
-
             // Send message
             async function sendMessage() {
                 if (isSending) return;
@@ -694,6 +796,69 @@ Conversation history:
                 userInput.value = '';
                 isSending = false;
             }
+
+            // Flirty Clicker Game
+            flirtyGameButton.addEventListener('click', () => {
+                if (!selectedCharacter) return;
+                flirtPoints = 0;
+                earnedRewards = [];
+                const char = characters[selectedCharacter];
+                flirtyGameAvatar.src = char.avatar;
+                flirtyGameMessage.textContent = "Click to start flirting!";
+                flirtPointsDisplay.textContent = flirtPoints;
+                flirtHighScoreDisplay.textContent = highScores[selectedCharacter] || 0;
+                flirtRewardsDisplay.textContent = "None yet!";
+                flirtClickButton.disabled = false;
+                flirtyGameModal.style.display = 'flex';
+            });
+
+            flirtClickButton.addEventListener('click', () => {
+                if (flirtClickCooldown) return;
+                flirtClickCooldown = true;
+                flirtClickButton.disabled = true;
+                setTimeout(() => {
+                    flirtClickCooldown = false;
+                    flirtClickButton.disabled = false;
+                }, 1000); // 1-second cooldown
+
+                const char = characters[selectedCharacter];
+                flirtPoints++;
+                flirtPointsDisplay.textContent = flirtPoints;
+
+                // Update high score
+                if (!highScores[selectedCharacter] || flirtPoints > highScores[selectedCharacter]) {
+                    highScores[selectedCharacter] = flirtPoints;
+                    localStorage.setItem('flirtHighScores', JSON.stringify(highScores));
+                    flirtHighScoreDisplay.textContent = flirtPoints;
+                }
+
+                // Update flirty message based on points
+                if (flirtPoints <= 10) {
+                    flirtyGameMessage.textContent = char.flirtyGame.low;
+                } else if (flirtPoints <= 20) {
+                    flirtyGameMessage.textContent = char.flirtyGame.mid;
+                } else {
+                    flirtyGameMessage.textContent = char.flirtyGame.high;
+                }
+
+                // Check for rewards
+                if (char.flirtyRewards[flirtPoints] && !earnedRewards.includes(flirtPoints)) {
+                    earnedRewards.push(flirtPoints);
+                    if (flirtPoints === 20) {
+                        chatDisplay.innerHTML += `<div class="chat-message bot-message">${char.name}: ${char.flirtyRewards[20]}</div>`;
+                        conversationHistory.push({ role: "bot", content: char.flirtyRewards[20] });
+                        chatDisplay.scrollTop = chatDisplay.scrollHeight;
+                    }
+                    flirtRewardsDisplay.textContent = earnedRewards.map(points => {
+                        if (points === 30) return char.flirtyRewards[30];
+                        return `Flirt Points ${points}`;
+                    }).join(', ');
+                }
+            });
+
+            document.getElementById('close-flirty-game-button').addEventListener('click', () => {
+                flirtyGameModal.style.display = 'none';
+            });
 
             // Character creator modal
             const modal = document.getElementById('character-creator-modal');
@@ -726,11 +891,16 @@ Conversation history:
                     examples: [example],
                     greeting: `Hi, I’m ${name}! Let’s have some fun—what’s on your mind?`,
                     avatar: "https://via.placeholder.com/50?text=" + name.charAt(0),
-                    flirtyPlay: [
-                        `${name} winks at you playfully. ‘Oh, you wanna play with me? Let’s see how much fun we can have!’`,
-                        `${name} giggles, stepping closer. ‘Mmm, you’re good at this! How about a little tease to keep things exciting?’`,
-                        `${name} smiles warmly, her voice soft. ‘You’re making me blush! Wanna keep going, or should we chat instead?’`
-                    ]
+                    flirtyGame: {
+                        low: `${name} winks at you playfully. ‘Oh, you wanna flirt with me? Let’s see how much fun we can have!’`,
+                        mid: `${name} giggles, stepping closer. ‘Mmm, you’re good at this! Let’s make things a bit more exciting!’`,
+                        high: `${name} smiles warmly, her voice soft. ‘You’re making me blush—let’s see how much hotter this can get!’`
+                    },
+                    flirtyRewards: {
+                        10: `${name} giggles, her eyes sparkling. ‘You’re quite the charmer—let’s keep going!’`,
+                        20: `${name} whispers, ‘You’re making my heart race… let’s talk about your deepest desires!’`,
+                        30: `Master Flirt with ${name}`
+                    }
                 };
                 localStorage.setItem('characters', JSON.stringify(characters));
                 renderCharacterList();
