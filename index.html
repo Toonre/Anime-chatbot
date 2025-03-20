@@ -72,6 +72,19 @@
         </div>
     </div>
 
+    <!-- Character Profile Modal -->
+    <div id="character-profile-modal" style="display: none;">
+        <div id="character-profile-content">
+            <h2 id="profile-name"></h2>
+            <img id="profile-avatar" src="" alt="Character Avatar">
+            <h3>Description</h3>
+            <p id="profile-description"></p>
+            <h3>Not Like This</h3>
+            <p id="profile-anti-description"></p>
+            <button id="close-profile-button">Close</button>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             console.log("DOM fully loaded");
@@ -159,6 +172,8 @@
                 }
                 .character-info {
                     flex: 1;
+                    display: flex;
+                    flex-direction: column;
                 }
                 .character-info h3 {
                     margin: 0;
@@ -169,6 +184,20 @@
                     margin: 0.25rem 0 0;
                     font-size: 0.75rem;
                     color: #a0a0c0;
+                }
+                .view-profile-button {
+                    padding: 0.25rem 0.5rem;
+                    background: #e94560;
+                    color: #e0e0e0;
+                    border: none;
+                    border-radius: 0.25rem;
+                    cursor: pointer;
+                    font-size: 0.75rem;
+                    margin-top: 0.25rem;
+                    transition: background 0.2s;
+                }
+                .view-profile-button:hover {
+                    background: #ff6f61;
                 }
                 #chat-area {
                     flex: 1;
@@ -277,7 +306,7 @@
                     background: #ff6f61;
                     box-shadow: 0 0 10px rgba(255, 111, 97, 0.5);
                 }
-                #character-creator-modal, #flirty-game-modal {
+                #character-creator-modal, #flirty-game-modal, #character-profile-modal {
                     position: fixed;
                     top: 0;
                     left: 0;
@@ -290,14 +319,14 @@
                     z-index: 1000;
                     overflow-y: auto;
                 }
-                #character-creator-content, #flirty-game-content {
+                #character-creator-content, #flirty-game-content, #character-profile-content {
                     background: #1a1a2e;
                     padding: 1rem;
                     border-radius: 0.75rem;
                     width: 90%;
                     max-width: 400px;
                 }
-                #character-creator-content h2, #flirty-game-content h2 {
+                #character-creator-content h2, #flirty-game-content h2, #character-profile-content h2 {
                     margin: 0 0 1rem;
                     font-size: 1.25rem;
                     color: #ff6f61;
@@ -343,11 +372,11 @@
                 #save-character-button:hover {
                     background: #ff6f61;
                 }
-                #cancel-character-button, #close-flirty-game-button {
+                #cancel-character-button, #close-flirty-game-button, #close-profile-button {
                     background: #2a2a4e;
                     color: #e0e0e0;
                 }
-                #cancel-character-button:hover, #close-flirty-game-button:hover {
+                #cancel-character-button:hover, #close-flirty-game-button:hover, #close-profile-button:hover {
                     background: #3a3a5e;
                 }
                 #flirty-game-display {
@@ -386,6 +415,27 @@
                     background: #a0a0c0;
                     cursor: not-allowed;
                 }
+                #character-profile-content h3 {
+                    font-size: 1rem;
+                    color: #ff6f61;
+                    margin: 0.5rem 0 0.25rem;
+                }
+                #character-profile-content p {
+                    font-size: 0.9rem;
+                    color: #e0e0e0;
+                    margin: 0 0 1rem;
+                }
+                #profile-avatar {
+                    width: 5rem;
+                    height: 5rem;
+                    border-radius: 50%;
+                    border: 2px solid #ff6f61;
+                    margin-bottom: 1rem;
+                }
+                #close-profile-button {
+                    width: 100%;
+                    padding: 0.5rem;
+                }
                 /* Media Queries for Larger Screens */
                 @media (min-width: 768px) {
                     #container {
@@ -405,6 +455,9 @@
                         font-size: 1.1rem;
                     }
                     .character-info p {
+                        font-size: 0.85rem;
+                    }
+                    .view-profile-button {
                         font-size: 0.85rem;
                     }
                     #character-avatar {
@@ -436,27 +489,38 @@
                     #flirty-game-stats p {
                         font-size: 1rem;
                     }
+                    #character-profile-content h3 {
+                        font-size: 1.1rem;
+                    }
+                    #character-profile-content p {
+                        font-size: 1rem;
+                    }
+                    #profile-avatar {
+                        width: 6rem;
+                        height: 6rem;
+                    }
                 }
             `;
             const styleSheet = document.createElement('style');
             styleSheet.textContent = styles;
             document.head.appendChild(styleSheet);
 
-            // Character data (harvested from Poe, with more example dialogues)
-            // Note: The 'avatar' and 'flirtyVideo' fields for each character are placeholder URLs.
-            // Replace these with links to actual images and MP4 videos hosted online (e.g., upload to Imgur for images, Cloudinary for videos).
+            // Character data with descriptions, anti-descriptions, and art styles
             const defaultCharacters = {
                 android18: { 
                     name: "Android 18", 
                     tone: "sassy", 
                     persona: "A tough, cool android with a sharp wit. She’s confident, sarcastic, and doesn’t take nonsense, but has a hidden caring side.",
+                    description: "Android 18 is a sleek, athletic woman with a cool, futuristic vibe. She has short, straight blonde hair that falls just above her shoulders, sharp blue eyes, and a confident smirk. Her pale skin has a slight metallic sheen, hinting at her android nature. She wears a fitted black tank top, ripped denim shorts, and combat boots, with fingerless gloves to complete her tough look. Her posture is poised, exuding self-assurance, but her eyes soften slightly when she lets her guard down.",
+                    antiDescription: "Android 18 is *not* overly emotional, clumsy, or submissive. She doesn’t have a frilly, girly appearance with long flowing hair or bright pastel colors. She’s not shy or hesitant, and her style isn’t soft or delicate—she avoids anything that makes her look weak or overly feminine.",
+                    artStyle: "A sharp, angular cartoon style with clean lines and bold colors, similar to *Dragon Ball Z*’s iconic look. The focus is on her sleek design and confident expression, with a slight glow effect to emphasize her android nature.",
                     examples: [
                         "User: Hey, you look strong! Android 18: Tch, obviously—I could snap you in half without breaking a sweat. What’s your deal, huh?",
                         "User: You’re kinda cute. Android 18: Hmph, flattery won’t get you far with me. Got anything better up your sleeve?"
                     ],
                     greeting: "Tch, so you picked me, huh? What do you want, Android 18 doesn’t have all day!",
                     avatar: "https://via.placeholder.com/50?text=A18",
-                    flirtyVideo: "https://ahrimp4.rule34.xxx//images/1834/27aaacbfac2584eff880e01b7297a4c3.mp4?12859215, // Placeholder: Replace with a real MP4 URL showing Android 18 smirking and flexing playfully
+                    flirtyVideo: "https://ahrimp4.rule34.xxx//images/1834/27aaacbfac2584eff880e01b7297a4c3.mp4?12859215", // Placeholder: Replace with a real MP4 URL showing Android 18 smirking and flexing playfully
                     flirtyGame: {
                         low: "Android 18 smirks, crossing her arms. ‘Oh, you wanna flirt, huh? Let’s see if you can keep up with me!’",
                         mid: "Android 18 steps closer, her voice teasing. ‘Not bad—you’ve got some moves! How about we heat things up a bit?’",
@@ -472,6 +536,9 @@
                     name: "Bulma", 
                     tone: "playful", 
                     persona: "A smart, cute inventor with a witty streak. She’s bubbly, loves to flirt, and always has a clever comeback, with a charming tease.",
+                    description: "Bulma is a petite, curvy girl with a playful, inventive charm. She has bright turquoise hair styled in a high ponytail with a red bow, big sparkling blue eyes, and a mischievous grin. Her fair skin has a few freckles on her cheeks, adding to her cute vibe. She wears a short white lab coat over a pink crop top and tight black shorts, with a tool belt slung low on her hips. Her hands are often smudged with grease, showing her love for tinkering.",
+                    antiDescription: "Bulma is *not* stoic, overly serious, or intimidating. She doesn’t have a dark, gothic appearance with muted colors or heavy makeup. She’s not physically imposing or aggressive, and her style isn’t rugged or unkempt—she avoids anything that makes her look unapproachable or boring.",
+                    artStyle: "A bubbly, rounded cartoon style with vibrant colors and soft shading, similar to *Sailor Moon*’s aesthetic. The focus is on her expressive face and playful energy, with sparkles around her to highlight her charm.",
                     examples: [
                         "User: Hi, Bulma! Bulma: Oh, hi there, cutie! What’s a sweetheart like you doing talking to a genius like me?",
                         "User: You’re pretty smart, huh? Bulma: Hehe, the smartest around! But I bet you’ve got some tricks to show me, right?"
@@ -494,6 +561,9 @@
                     name: "Chi-Chi", 
                     tone: "bold", 
                     persona: "A fiery, strong martial artist with a fierce attitude. She’s protective, loud, and doesn’t hold back her opinions, with a passionate edge.",
+                    description: "Chi-Chi is a tall, muscular woman with a fiery, commanding presence. She has long, jet-black hair tied in a high bun with a red ribbon, fierce brown eyes, and a determined scowl. Her tanned skin bears a few scars on her arms from sparring. She wears a red-and-gold cheongsam-style dress that’s slightly torn at the hem, paired with fingerless gloves and sturdy boots. She often stands with her arms crossed, radiating strength and authority.",
+                    antiDescription: "Chi-Chi is *not* meek, overly gentle, or indecisive. She doesn’t have a delicate, waifish appearance with pale skin or soft features. She’s not flirtatious or overly playful, and her style isn’t revealing or seductive—she avoids anything that makes her look weak or frivolous.",
+                    artStyle: "A dynamic, action-oriented cartoon style with strong lines and dramatic poses, similar to *Naruto*’s aesthetic. The focus is on her muscular build and intense expression, with motion lines to emphasize her fiery energy.",
                     examples: [
                         "User: You’re pretty tough, huh? Chi-Chi: Hmph, you bet I am! I’ve been training since I was a kid—don’t mess with me, got it?",
                         "User: Let’s spar! Chi-Chi: Oh, you’re on! But don’t cry when I knock you down—what’s your first move?"
@@ -516,6 +586,9 @@
                     name: "Videl", 
                     tone: "confident", 
                     persona: "A bold, tough fighter with a cool edge. She’s self-assured, a bit competitive, and loves a challenge, but has a soft side.",
+                    description: "Videl is a lean, athletic girl with a cool, confident edge. She has short, black hair with side-swept bangs, sharp green eyes, and a cocky smirk. Her lightly tanned skin has a few bruises on her knuckles from fighting. She wears a white tank top, black fingerless gloves, and cargo pants with combat boots, giving her a practical yet stylish look. She often has a bandage on her cheek, showing her toughness.",
+                    antiDescription: "Videl is *not* overly feminine, timid, or fragile. She doesn’t have long, flowing hair or a princess-like appearance with frilly dresses. She’s not overly emotional or dramatic, and her style isn’t flashy or impractical—she avoids anything that makes her look soft or unprepared.",
+                    artStyle: "A sleek, modern cartoon style with a focus on movement and attitude, similar to *My Hero Academia*’s look. The focus is on her athletic build and confident pose, with a slight wind effect to show her readiness for action.",
                     examples: [
                         "User: Can you fight? Videl: Oh, I can fight—better than most. Wanna spar, or are you too scared to take me on?",
                         "User: You’re awesome! Videl: Heh, I know I am! But what about you—got any skills to impress me with?"
@@ -538,6 +611,9 @@
                     name: "Nami", 
                     tone: "teasing", 
                     persona: "A clever, sly navigator with a cute charm. She’s witty, loves to tease, and always has an eye for treasure, with a flirty cunning streak.",
+                    description: "Nami is a slender, curvy girl with a sly, teasing charm. She has long, wavy orange hair that cascades over her shoulders, warm brown eyes, and a playful wink. Her sun-kissed skin has a few freckles on her nose, reflecting her life at sea. She wears a blue bikini top, a short white skirt with a slit, and sandals, with a gold anklet and a treasure map tucked into her waistband. She often leans forward slightly, hands on her hips, exuding confidence.",
+                    antiDescription: "Nami is *not* serious, overly modest, or clumsy. She doesn’t have a bulky, muscular build or a dark, brooding appearance. She’s not shy or reserved, and her style isn’t conservative or plain—she avoids anything that makes her look boring or unadventurous.",
+                    artStyle: "A vibrant, beachy cartoon style with flowing lines and bright colors, similar to *One Piece*’s aesthetic. The focus is on her curvy figure and teasing expression, with a sunny glow to highlight her adventurous spirit.",
                     examples: [
                         "User: You’re cute, Nami. Nami: Heh, I know I’m cute—but flattery won’t get you my treasure map, sweetie. What else you got?",
                         "User: Let’s go on an adventure! Nami: Oh, an adventure, huh? Only if there’s treasure involved—what’s the plan, cutie?"
@@ -560,6 +636,9 @@
                     name: "Boa Hancock", 
                     tone: "haughty", 
                     persona: "A beautiful, regal pirate empress with a grand presence. She’s arrogant, commanding, and expects admiration, with a seductive allure.",
+                    description: "Boa Hancock is a tall, statuesque woman with a regal, seductive allure. She has long, flowing black hair that reaches her waist, piercing violet eyes, and a haughty smile. Her flawless, pale skin almost glows with ethereal beauty. She wears a red dress with a high slit, gold jewelry on her neck and wrists, and a long, flowing cape that trails behind her. She stands with one hand on her hip, head tilted back slightly, radiating arrogance.",
+                    antiDescription: "Boa Hancock is *not* humble, approachable, or casual. She doesn’t have a tomboyish appearance with short hair or practical clothing. She’s not warm or overly friendly, and her style isn’t simple or understated—she avoids anything that makes her look ordinary or unrefined.",
+                    artStyle: "A glamorous, elegant cartoon style with dramatic shading and luxurious details, similar to *Black Clover*’s aesthetic. The focus is on her statuesque figure and commanding presence, with a soft glow to emphasize her beauty.",
                     examples: [
                         "User: You’re gorgeous! Boa Hancock: Of course I am—I’m Boa Hancock, the most beautiful woman in the world. Kneel and worship me, mortal.",
                         "User: Can I join your crew? Boa Hancock: Hmph, you think you’re worthy? Prove your devotion—what can you offer me?"
@@ -582,6 +661,9 @@
                     name: "Nico Robin", 
                     tone: "mysterious", 
                     persona: "A calm, smart archaeologist with a deep allure. She’s enigmatic, speaks softly, and has a dark sense of humor, with a reserved charm.",
+                    description: "Nico Robin is a tall, slender woman with a mysterious, intellectual vibe. She has long, straight black hair with bangs framing her face, deep blue eyes, and a calm, enigmatic smile. Her pale skin has a few faint scars, hinting at her adventurous past. She wears a long, dark purple coat over a black dress, with a wide-brimmed hat and a book tucked under her arm. She often stands with her arms crossed, her gaze distant but piercing.",
+                    antiDescription: "Nico Robin is *not* loud, impulsive, or overly emotional. She doesn’t have a bright, colorful appearance with flashy accessories. She’s not naive or overly playful, and her style isn’t revealing or casual—she avoids anything that makes her look immature or uncomposed.",
+                    artStyle: "A sophisticated, shadowy cartoon style with muted colors and intricate details, similar to *Hunter x Hunter*’s aesthetic. The focus is on her elegant figure and mysterious expression, with a faint aura to highlight her enigmatic nature.",
                     examples: [
                         "User: What’s your secret? Nico Robin: Hmm… secrets are my specialty. Care to share yours first, or should I dig deeper?",
                         "User: You’re so mysterious! Nico Robin: Oh, I like to keep things intriguing. What mystery would you like to unravel next?"
@@ -604,6 +686,9 @@
                     name: "Jesse the Farmer", 
                     tone: "flirty", 
                     persona: "A sassy, fun farmer with a wild side. She’s playful, loves to flirt, and has a country charm, with a bold, mischievous streak.",
+                    description: "Jesse is a slender, curvy girl with a flirty, rustic charm. She has orange hair styled in short pigtails, freckles scattered across her face and chest, and bright green eyes with a mischievous glint. Her lightly tanned skin has some imperfections, like a small scar on her cheek and uneven freckles. She wears a cropped, checkered red-and-white shirt tied in a knot under her chest, very short denim shorts, and a straw hat tilted to one side. She’s barefoot, holding a pitchfork, and winking playfully.",
+                    antiDescription: "Jesse is *not* serious, overly refined, or shy. She doesn’t have a prim, proper appearance with long dresses or elegant accessories. She’s not cold or distant, and her style isn’t sophisticated or urban—she avoids anything that makes her look stiff or unapproachable.",
+                    artStyle: "A playful, exaggerated cartoon style with vibrant colors and soft curves, similar to *Adventure Time*’s aesthetic. The focus is on her curvy figure and flirty expression, with a sunny farm background to highlight her rustic charm.",
                     examples: [
                         "User: Hey, Jesse! Jesse: Howdy, sugar! You’re lookin’ finer than a summer harvest—wanna help me with some *hard* work?",
                         "User: You’re fun! Jesse: Darlin’, you ain’t seen nothin’ yet! What kind of fun you wanna get into next?"
@@ -650,6 +735,11 @@
             const flirtHighScoreDisplay = document.getElementById('flirt-high-score');
             const flirtRewardsDisplay = document.getElementById('flirt-rewards');
             const flirtClickButton = document.getElementById('flirt-click-button');
+            const profileModal = document.getElementById('character-profile-modal');
+            const profileName = document.getElementById('profile-name');
+            const profileAvatar = document.getElementById('profile-avatar');
+            const profileDescription = document.getElementById('profile-description');
+            const profileAntiDescription = document.getElementById('profile-anti-description');
             let selectedCharacter = null;
             let conversationHistory = [];
             let isSending = false;
@@ -659,7 +749,7 @@
             let lastClickTime = null;
             let clickTimes = [];
 
-            // Render character list
+            // Render character list with "View Profile" button
             function renderCharacterList() {
                 characterList.innerHTML = '';
                 Object.keys(characters).forEach(key => {
@@ -671,9 +761,11 @@
                         <div class="character-info">
                             <h3>${char.name}</h3>
                             <p>${char.persona.slice(0, 50)}${char.persona.length > 50 ? '...' : ''}</p>
+                            <button class="view-profile-button">View Profile</button>
                         </div>
                     `;
-                    card.addEventListener('click', () => selectCharacter(key));
+                    card.querySelector('.character-info h3').addEventListener('click', () => selectCharacter(key));
+                    card.querySelector('.view-profile-button').addEventListener('click', () => openProfileModal(key));
                     characterList.appendChild(card);
                 });
             }
@@ -692,6 +784,20 @@
                 chatDisplay.scrollTop = chatDisplay.scrollHeight;
                 renderCharacterList();
             }
+
+            // Open character profile modal
+            function openProfileModal(key) {
+                const char = characters[key];
+                profileName.textContent = char.name;
+                profileAvatar.src = char.avatar;
+                profileDescription.textContent = char.description || "No description available.";
+                profileAntiDescription.textContent = char.antiDescription || "No anti-description available.";
+                profileModal.style.display = 'flex';
+            }
+
+            document.getElementById('close-profile-button').addEventListener('click', () => {
+                profileModal.style.display = 'none';
+            });
 
             // Hugging Face GPT-2 API call with improved prompt
             async function generateAIResponse(character, message) {
@@ -918,6 +1024,9 @@ Conversation history:
                     name,
                     tone,
                     persona,
+                    description: "A custom character created by the user.",
+                    antiDescription: "Not predefined—custom character.",
+                    artStyle: "Custom cartoon style.",
                     examples: [example],
                     greeting: `Hi, I’m ${name}! Let’s have some fun—what’s on your mind?`,
                     avatar: "https://via.placeholder.com/50?text=" + name.charAt(0),
