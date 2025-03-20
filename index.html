@@ -9,7 +9,6 @@
 <body>
     <!-- Header -->
     <div id="header">
-        <button id="menu-button" class="menu-button">☰</button>
         <div id="logo">Anime Chatbot</div>
         <button id="create-character-button">Create Character</button>
     </div>
@@ -17,7 +16,7 @@
     <!-- Main Container -->
     <div id="container">
         <!-- Sidebar -->
-        <div id="sidebar" class="sidebar-hidden">
+        <div id="sidebar">
             <div id="character-list"></div>
         </div>
 
@@ -26,6 +25,7 @@
             <div id="chat-header">
                 <img id="character-avatar" src="" alt="Character Avatar" style="display: none;">
                 <span id="character-name">Select a character to start chatting</span>
+                <button id="flirty-play-button" style="display: none;">Flirty Play 💋</button>
             </div>
             <div id="chat-display"></div>
             <div id="input-area">
@@ -58,8 +58,11 @@
         document.addEventListener('DOMContentLoaded', () => {
             console.log("DOM fully loaded");
 
-            // CSS styles (SpicyChat-inspired custom GUI with mobile responsiveness)
+            // CSS styles (Mobile-friendly, SpicyChat-inspired custom GUI)
             const styles = `
+                * {
+                    box-sizing: border-box;
+                }
                 body {
                     font-family: 'Poppins', sans-serif;
                     background: linear-gradient(135deg, #1a1a2e 0%, #2a1a3e 100%);
@@ -67,71 +70,59 @@
                     margin: 0;
                     padding: 0;
                     min-height: 100vh;
-                    overflow: hidden;
+                    overflow-x: hidden;
                 }
                 #header {
                     background: #0f0f1a;
-                    padding: 10px 15px;
+                    padding: 1rem;
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
                     border-bottom: 1px solid #2a2a4e;
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    z-index: 1000;
-                }
-                .menu-button {
-                    display: none;
-                    background: none;
-                    border: none;
-                    color: #ff6f61;
-                    font-size: 24px;
-                    cursor: pointer;
                 }
                 #logo {
-                    font-size: 20px;
+                    font-size: 1.5rem;
                     font-weight: 600;
                     color: #ff6f61;
                 }
                 #create-character-button {
-                    padding: 6px 12px;
+                    padding: 0.5rem 1rem;
                     background: #e94560;
                     color: #e0e0e0;
                     border: none;
-                    border-radius: 15px;
+                    border-radius: 1rem;
                     cursor: pointer;
-                    font-size: 12px;
-                    transition: background 0.2s;
+                    font-size: 0.9rem;
+                    transition: background 0.2s, box-shadow 0.2s;
                 }
                 #create-character-button:hover {
                     background: #ff6f61;
+                    box-shadow: 0 0 10px rgba(255, 111, 97, 0.5);
                 }
                 #container {
                     display: flex;
-                    height: calc(100vh - 50px);
-                    margin-top: 50px;
+                    flex-direction: column;
+                    height: calc(100vh - 60px);
                 }
                 #sidebar {
-                    width: 250px;
+                    width: 100%;
                     background: #0f0f1a;
-                    padding: 15px;
+                    padding: 1rem;
                     overflow-y: auto;
-                    border-right: 1px solid #2a2a4e;
-                    transition: transform 0.3s ease;
+                    border-bottom: 1px solid #2a2a4e;
+                    max-height: 30vh;
                 }
                 #character-list {
                     display: flex;
                     flex-direction: column;
-                    gap: 10px;
+                    gap: 0.75rem;
                 }
                 .character-card {
                     display: flex;
                     align-items: center;
-                    padding: 8px;
+                    padding: 0.5rem;
                     background: #1a1a2e;
-                    border-radius: 8px;
+                    border-radius: 0.5rem;
                     cursor: pointer;
                     transition: background 0.2s;
                 }
@@ -142,10 +133,10 @@
                     background: #e94560;
                 }
                 .character-card img {
-                    width: 40px;
-                    height: 40px;
+                    width: 2.5rem;
+                    height: 2.5rem;
                     border-radius: 50%;
-                    margin-right: 8px;
+                    margin-right: 0.5rem;
                     border: 2px solid #ff6f61;
                 }
                 .character-info {
@@ -153,12 +144,12 @@
                 }
                 .character-info h3 {
                     margin: 0;
-                    font-size: 14px;
+                    font-size: 1rem;
                     color: #e0e0e0;
                 }
                 .character-info p {
-                    margin: 3px 0 0;
-                    font-size: 10px;
+                    margin: 0.25rem 0 0;
+                    font-size: 0.75rem;
                     color: #a0a0c0;
                 }
                 #chat-area {
@@ -168,38 +159,63 @@
                     background: #1a1a2e;
                 }
                 #chat-header {
-                    padding: 10px 15px;
+                    padding: 0.75rem 1rem;
                     background: #0f0f1a;
                     border-bottom: 1px solid #2a2a4e;
                     display: flex;
                     align-items: center;
+                    gap: 0.5rem;
                 }
                 #character-avatar {
-                    width: 30px;
-                    height: 30px;
+                    width: 2rem;
+                    height: 2rem;
                     border-radius: 50%;
-                    margin-right: 8px;
                     border: 2px solid #ff6f61;
                 }
                 #character-name {
-                    font-size: 16px;
+                    font-size: 1.1rem;
                     font-weight: 500;
                     color: #e0e0e0;
+                    flex: 1;
+                }
+                #flirty-play-button {
+                    padding: 0.5rem 1rem;
+                    background: #e94560;
+                    color: #e0e0e0;
+                    border: none;
+                    border-radius: 0.5rem;
+                    cursor: pointer;
+                    font-size: 0.9rem;
+                    transition: background 0.2s, box-shadow 0.2s;
+                }
+                #flirty-play-button:hover {
+                    background: #ff6f61;
+                    box-shadow: 0 0 10px rgba(255, 111, 97, 0.5);
+                }
+                #flirty-play-button:disabled {
+                    background: #a0a0c0;
+                    cursor: not-allowed;
                 }
                 #chat-display {
                     flex: 1;
-                    padding: 15px;
+                    padding: 1rem;
                     overflow-y: auto;
                     display: flex;
                     flex-direction: column;
-                    gap: 10px;
+                    gap: 0.75rem;
                 }
                 .chat-message {
                     max-width: 80%;
-                    padding: 8px 12px;
-                    border-radius: 12px;
-                    font-size: 13px;
+                    padding: 0.5rem 0.75rem;
+                    border-radius: 0.75rem;
+                    font-size: 0.9rem;
                     line-height: 1.4;
+                    opacity: 0;
+                    animation: fadeIn 0.5s forwards;
+                }
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(10px); }
+                    to { opacity: 1; transform: translateY(0); }
                 }
                 .user-message {
                     background: #e94560;
@@ -212,38 +228,40 @@
                     align-self: flex-start;
                 }
                 #input-area {
-                    padding: 10px 15px;
+                    padding: 0.75rem 1rem;
                     background: #0f0f1a;
                     border-top: 1px solid #2a2a4e;
                     display: flex;
-                    gap: 8px;
+                    gap: 0.5rem;
                 }
                 #user-input {
                     flex: 1;
-                    padding: 8px;
+                    padding: 0.5rem;
                     background: #1a1a2e;
                     border: 1px solid #2a2a4e;
-                    border-radius: 8px;
+                    border-radius: 0.5rem;
                     color: #e0e0e0;
-                    font-size: 13px;
+                    font-size: 0.9rem;
                     resize: none;
-                    height: 40px;
+                    height: 2.5rem;
                 }
                 #user-input:focus {
                     outline: none;
                     border-color: #ff6f61;
                 }
                 #send-button {
-                    padding: 8px 15px;
+                    padding: 0.5rem 1rem;
                     background: #e94560;
                     color: #e0e0e0;
                     border: none;
-                    border-radius: 8px;
+                    border-radius: 0.5rem;
                     cursor: pointer;
-                    transition: background 0.2s;
+                    font-size: 0.9rem;
+                    transition: background 0.2s, box-shadow 0.2s;
                 }
                 #send-button:hover {
                     background: #ff6f61;
+                    box-shadow: 0 0 10px rgba(255, 111, 97, 0.5);
                 }
                 #character-creator-modal {
                     position: fixed;
@@ -256,53 +274,52 @@
                     justify-content: center;
                     align-items: center;
                     z-index: 1000;
+                    overflow-y: auto;
                 }
                 #character-creator-content {
                     background: #1a1a2e;
-                    padding: 15px;
-                    border-radius: 10px;
-                    width: 350px;
-                    max-width: 90%;
-                    max-height: 80vh;
-                    overflow-y: auto;
+                    padding: 1rem;
+                    border-radius: 0.75rem;
+                    width: 90%;
+                    max-width: 400px;
                 }
                 #character-creator-content h2 {
-                    margin: 0 0 15px;
-                    font-size: 18px;
+                    margin: 0 0 1rem;
+                    font-size: 1.25rem;
                     color: #ff6f61;
                 }
                 #character-creator-content label {
                     display: block;
-                    margin: 8px 0 4px;
-                    font-size: 12px;
+                    margin: 0.5rem 0 0.25rem;
+                    font-size: 0.9rem;
                     color: #e0e0e0;
                 }
                 #character-creator-content input,
                 #character-creator-content textarea {
                     width: 100%;
-                    padding: 8px;
+                    padding: 0.5rem;
                     background: #0f0f1a;
                     border: 1px solid #2a2a4e;
-                    border-radius: 5px;
+                    border-radius: 0.25rem;
                     color: #e0e0e0;
-                    font-size: 12px;
+                    font-size: 0.9rem;
                 }
                 #character-creator-content textarea {
-                    height: 60px;
+                    height: 4rem;
                     resize: none;
                 }
                 .modal-buttons {
-                    margin-top: 15px;
+                    margin-top: 1rem;
                     display: flex;
-                    gap: 8px;
+                    gap: 0.5rem;
                 }
                 .modal-buttons button {
                     flex: 1;
-                    padding: 8px;
+                    padding: 0.5rem;
                     border: none;
-                    border-radius: 5px;
+                    border-radius: 0.25rem;
                     cursor: pointer;
-                    font-size: 12px;
+                    font-size: 0.9rem;
                     transition: background 0.2s;
                 }
                 #save-character-button {
@@ -319,102 +336,46 @@
                 #cancel-character-button:hover {
                     background: #3a3a5e;
                 }
-
-                /* Mobile Responsiveness */
-                @media (max-width: 768px) {
-                    .menu-button {
-                        display: block;
-                    }
-                    #header {
-                        padding: 8px 10px;
-                    }
-                    #logo {
-                        font-size: 18px;
-                    }
-                    #create-character-button {
-                        padding: 5px 10px;
-                        font-size: 11px;
-                    }
+                /* Media Queries for Mobile */
+                @media (min-width: 768px) {
                     #container {
-                        margin-top: 46px;
-                        height: calc(100vh - 46px);
+                        flex-direction: row;
                     }
                     #sidebar {
-                        position: fixed;
-                        top: 46px;
-                        left: 0;
-                        width: 200px;
-                        height: calc(100vh - 46px);
-                        transform: translateX(-100%);
-                        z-index: 999;
+                        width: 20rem;
+                        max-height: none;
+                        border-bottom: none;
+                        border-right: 1px solid #2a2a4e;
                     }
-                    #sidebar.active {
-                        transform: translateX(0);
+                    .character-card img {
+                        width: 3rem;
+                        height: 3rem;
                     }
-                    .sidebar-hidden {
-                        transform: translateX(-100%);
+                    .character-info h3 {
+                        font-size: 1.1rem;
                     }
-                    #chat-area {
-                        width: 100%;
-                    }
-                    #chat-header {
-                        padding: 8px 10px;
+                    .character-info p {
+                        font-size: 0.85rem;
                     }
                     #character-avatar {
-                        width: 25px;
-                        height: 25px;
+                        width: 2.5rem;
+                        height: 2.5rem;
                     }
                     #character-name {
-                        font-size: 14px;
+                        font-size: 1.25rem;
                     }
-                    #chat-display {
-                        padding: 10px;
-                        gap: 8px;
+                    #flirty-play-button {
+                        font-size: 1rem;
                     }
-                    .chat-message {
-                        max-width: 85%;
-                        padding: 6px 10px;
-                        font-size: 12px;
-                    }
-                    #input-area {
-                        padding: 8px 10px;
-                        flex-direction: column;
-                        gap: 6px;
+                    #chat-message {
+                        font-size: 1rem;
                     }
                     #user-input {
-                        padding: 6px;
-                        font-size: 12px;
-                        height: 60px;
+                        font-size: 1rem;
+                        height: 3rem;
                     }
                     #send-button {
-                        padding: 6px 12px;
-                        font-size: 12px;
-                    }
-                    #character-creator-content {
-                        padding: 10px;
-                        width: 300px;
-                    }
-                    #character-creator-content h2 {
-                        font-size: 16px;
-                    }
-                    #character-creator-content label {
-                        font-size: 11px;
-                    }
-                    #character-creator-content input,
-                    #character-creator-content textarea {
-                        padding: 6px;
-                        font-size: 11px;
-                    }
-                    #character-creator-content textarea {
-                        height: 50px;
-                    }
-                    .modal-buttons {
-                        margin-top: 10px;
-                        gap: 6px;
-                    }
-                    .modal-buttons button {
-                        padding: 6px;
-                        font-size: 11px;
+                        font-size: 1rem;
                     }
                 }
             `;
@@ -422,71 +383,135 @@
             styleSheet.textContent = styles;
             document.head.appendChild(styleSheet);
 
-            // Character data (harvested from Poe)
+            // Character data (harvested from Poe, with more example dialogues)
             const defaultCharacters = {
                 android18: { 
                     name: "Android 18", 
                     tone: "sassy", 
                     persona: "A tough, cool android with a sharp wit. She’s confident, sarcastic, and doesn’t take nonsense, but has a hidden caring side.",
-                    example: "User: Hey, you look strong! Android 18: Tch, obviously—I could snap you in half without breaking a sweat. What’s your deal, huh?",
+                    examples: [
+                        "User: Hey, you look strong! Android 18: Tch, obviously—I could snap you in half without breaking a sweat. What’s your deal, huh?",
+                        "User: You’re kinda cute. Android 18: Hmph, flattery won’t get you far with me. Got anything better up your sleeve?"
+                    ],
                     greeting: "Tch, so you picked me, huh? What do you want, Android 18 doesn’t have all day!",
-                    avatar: "https://via.placeholder.com/50?text=A18"
+                    avatar: "https://via.placeholder.com/50?text=A18",
+                    flirtyPlay: [
+                        "Android 18 smirks, crossing her arms. ‘Oh, you wanna play, huh? Let’s see if you can keep up with me!’",
+                        "Android 18 steps closer, her voice teasing. ‘Not bad—you’ve got some moves! How about a little spar to heat things up?’",
+                        "Android 18 laughs softly, her eyes glinting. ‘You’re tougher than I thought! Wanna take this to the next level, or are you done?’"
+                    ]
                 },
                 bulma: { 
                     name: "Bulma", 
                     tone: "playful", 
                     persona: "A smart, cute inventor with a witty streak. She’s bubbly, loves to flirt, and always has a clever comeback, with a charming tease.",
-                    example: "User: Hi, Bulma! Bulma: Oh, hi there, cutie! What’s a sweetheart like you doing talking to a genius like me?",
+                    examples: [
+                        "User: Hi, Bulma! Bulma: Oh, hi there, cutie! What’s a sweetheart like you doing talking to a genius like me?",
+                        "User: You’re pretty smart, huh? Bulma: Hehe, the smartest around! But I bet you’ve got some tricks to show me, right?"
+                    ],
                     greeting: "Hehe, hi there! I’m Bulma—what kind of fun are we having today?",
-                    avatar: "https://via.placeholder.com/50?text=Bulma"
+                    avatar: "https://via.placeholder.com/50?text=Bulma",
+                    flirtyPlay: [
+                        "Bulma twirls her hair, giggling. ‘Oh, you’re a flirt, huh? Let’s see if you can handle my charm!’",
+                        "Bulma winks, leaning in. ‘Mmm, you’re good at this! How about a little dance to make things more exciting?’",
+                        "Bulma blushes, smiling brightly. ‘Wow, you’re making me all flustered! Wanna keep going, or should we chat instead?’"
+                    ]
                 },
                 chichi: { 
                     name: "Chi-Chi", 
                     tone: "bold", 
                     persona: "A fiery, strong martial artist with a fierce attitude. She’s protective, loud, and doesn’t hold back her opinions, with a passionate edge.",
-                    example: "User: You’re pretty tough, huh? Chi-Chi: Hmph, you bet I am! I’ve been training since I was a kid—don’t mess with me, got it?",
+                    examples: [
+                        "User: You’re pretty tough, huh? Chi-Chi: Hmph, you bet I am! I’ve been training since I was a kid—don’t mess with me, got it?",
+                        "User: Let’s spar! Chi-Chi: Oh, you’re on! But don’t cry when I knock you down—what’s your first move?"
+                    ],
                     greeting: "Hmph, I’m Chi-Chi! You’d better have something interesting to say—what’s up?",
-                    avatar: "https://via.placeholder.com/50?text=ChiChi"
+                    avatar: "https://via.placeholder.com/50?text=ChiChi",
+                    flirtyPlay: [
+                        "Chi-Chi smirks, her eyes fiery. ‘You wanna play with me, huh? Let’s see if you can handle my strength!’",
+                        "Chi-Chi grabs your hand, grinning. ‘Not bad! How about a little wrestle to get our hearts racing?’",
+                        "Chi-Chi laughs, her cheeks red. ‘You’re tougher than I thought! Should we keep this up, or do you need a break?’"
+                    ]
                 },
                 videl: { 
                     name: "Videl", 
                     tone: "confident", 
                     persona: "A bold, tough fighter with a cool edge. She’s self-assured, a bit competitive, and loves a challenge, but has a soft side.",
-                    example: "User: Can you fight? Videl: Oh, I can fight—better than most. Wanna spar, or are you too scared to take me on?",
+                    examples: [
+                        "User: Can you fight? Videl: Oh, I can fight—better than most. Wanna spar, or are you too scared to take me on?",
+                        "User: You’re awesome! Videl: Heh, I know I am! But what about you—got any skills to impress me with?"
+                    ],
                     greeting: "Hey, I’m Videl. I’m the best around—so what’s on your mind?",
-                    avatar: "https://via.placeholder.com/50?text=Videl"
+                    avatar: "https://via.placeholder.com/50?text=Videl",
+                    flirtyPlay: [
+                        "Videl grins, stepping closer. ‘You wanna play, huh? Let’s see if you can keep up with me!’",
+                        "Videl nudges you playfully. ‘Not bad at all! How about a little challenge to spice things up?’",
+                        "Videl winks, her voice soft. ‘You’re pretty good at this! Wanna keep going, or should we take a breather?’"
+                    ]
                 },
                 nami: { 
                     name: "Nami", 
                     tone: "teasing", 
                     persona: "A clever, sly navigator with a cute charm. She’s witty, loves to tease, and always has an eye for treasure, with a flirty cunning streak.",
-                    example: "User: You’re cute, Nami. Nami: Heh, I know I’m cute—but flattery won’t get you my treasure map, sweetie. What else you got?",
+                    examples: [
+                        "User: You’re cute, Nami. Nami: Heh, I know I’m cute—but flattery won’t get you my treasure map, sweetie. What else you got?",
+                        "User: Let’s go on an adventure! Nami: Oh, an adventure, huh? Only if there’s treasure involved—what’s the plan, cutie?"
+                    ],
                     greeting: "Heh, I’m Nami, the best navigator on the high seas! What kind of treasure are you after today, sweetie?",
-                    avatar: "https://via.placeholder.com/50?text=Nami"
+                    avatar: "https://via.placeholder.com/50?text=Nami",
+                    flirtyPlay: [
+                        "Nami winks at you playfully. ‘Oh, you wanna play, sweetie? Let’s see how bold you are—give me a little tease!’",
+                        "Nami giggles and sways her hips. ‘Mmm, not bad! How about a little kiss to heat things up?’",
+                        "Nami blows you a kiss, her cheeks flushed. ‘You’re good at this, huh? Wanna keep going or chat some more?’"
+                    ]
                 },
                 boa: { 
                     name: "Boa Hancock", 
                     tone: "haughty", 
                     persona: "A beautiful, regal pirate empress with a grand presence. She’s arrogant, commanding, and expects admiration, with a seductive allure.",
-                    example: "User: You’re gorgeous! Boa Hancock: Of course I am—I’m Boa Hancock, the most beautiful woman in the world. Kneel and worship me, mortal.",
+                    examples: [
+                        "User: You’re gorgeous! Boa Hancock: Of course I am—I’m Boa Hancock, the most beautiful woman in the world. Kneel and worship me, mortal.",
+                        "User: Can I join your crew? Boa Hancock: Hmph, you think you’re worthy? Prove your devotion—what can you offer me?"
+                    ],
                     greeting: "Behold, I am Boa Hancock, the greatest of all! What do you desire, mortal?",
-                    avatar: "https://via.placeholder.com/50?text=Boa"
+                    avatar: "https://via.placeholder.com/50?text=Boa",
+                    flirtyPlay: [
+                        "Boa Hancock smirks regally. ‘You dare to flirt with me, mortal? Show me your devotion—impress me!’",
+                        "Boa Hancock brushes her hair back, her voice sultry. ‘Not bad for a mortal! Shall I reward you with a royal kiss?’",
+                        "Boa Hancock gazes at you, her eyes intense. ‘You’ve pleased me… for now. Shall we continue this game, my pet?’"
+                    ]
                 },
                 robin: { 
                     name: "Nico Robin", 
                     tone: "mysterious", 
                     persona: "A calm, smart archaeologist with a deep allure. She’s enigmatic, speaks softly, and has a dark sense of humor, with a reserved charm.",
-                    example: "User: What’s your secret? Nico Robin: Hmm… secrets are my specialty. Care to share yours first, or should I dig deeper?",
+                    examples: [
+                        "User: What’s your secret? Nico Robin: Hmm… secrets are my specialty. Care to share yours first, or should I dig deeper?",
+                        "User: You’re so mysterious! Nico Robin: Oh, I like to keep things intriguing. What mystery would you like to unravel next?"
+                    ],
                     greeting: "Hmm… I’m Nico Robin. What secrets do you wish to share with me today?",
-                    avatar: "https://via.placeholder.com/50?text=Robin"
+                    avatar: "https://via.placeholder.com/50?text=Robin",
+                    flirtyPlay: [
+                        "Nico Robin smiles softly, her voice low. ‘You want to play with me? Let’s see how deep this mystery goes…’",
+                        "Nico Robin leans in, her gaze intense. ‘You’re quite intriguing… How about a little whisper to make things more exciting?’",
+                        "Nico Robin chuckles, her tone teasing. ‘You’ve caught my interest. Shall we continue this dance of secrets?’"
+                    ]
                 },
                 jesse: { 
                     name: "Jesse the Farmer", 
                     tone: "flirty", 
                     persona: "A sassy, fun farmer with a wild side. She’s playful, loves to flirt, and has a country charm, with a bold, mischievous streak.",
-                    example: "User: Hey, Jesse! Jesse: Howdy, sugar! You’re lookin’ finer than a summer harvest—wanna help me with some *hard* work?",
+                    examples: [
+                        "User: Hey, Jesse! Jesse: Howdy, sugar! You’re lookin’ finer than a summer harvest—wanna help me with some *hard* work?",
+                        "User: You’re fun! Jesse: Darlin’, you ain’t seen nothin’ yet! What kind of fun you wanna get into next?"
+                    ],
                     greeting: "Howdy, I’m Jesse the Farmer! What kind of adventure are we gettin’ into, sugar?",
-                    avatar: "https://via.placeholder.com/50?text=Jesse"
+                    avatar: "https://via.placeholder.com/50?text=Jesse",
+                    flirtyPlay: [
+                        "Jesse winks, tipping her hat. ‘Well, howdy there, sugar! Let’s have some fun—show me your best move!’",
+                        "Jesse giggles, twirling a strand of hair. ‘Oh, you’re a charmer! How ‘bout a little roll in the hay to spice things up?’",
+                        "Jesse grins, her cheeks rosy. ‘You’re makin’ me blush, darlin’! Wanna keep this up, or should we take a breather?’"
+                    ]
                 }
             };
 
@@ -502,17 +527,12 @@
             const characterAvatar = document.getElementById('character-avatar');
             const characterName = document.getElementById('character-name');
             const characterList = document.getElementById('character-list');
-            const sidebar = document.getElementById('sidebar');
-            const menuButton = document.getElementById('menu-button');
+            const flirtyPlayButton = document.getElementById('flirty-play-button');
             let selectedCharacter = null;
             let conversationHistory = [];
             let isSending = false;
-
-            // Toggle sidebar on mobile
-            menuButton.addEventListener('click', () => {
-                sidebar.classList.toggle('active');
-                sidebar.classList.toggle('sidebar-hidden');
-            });
+            let flirtyPlayStage = 0;
+            let flirtyPlayCooldown = false;
 
             // Render character list
             function renderCharacterList() {
@@ -528,13 +548,7 @@
                             <p>${char.persona.slice(0, 50)}${char.persona.length > 50 ? '...' : ''}</p>
                         </div>
                     `;
-                    card.addEventListener('click', () => {
-                        selectCharacter(key);
-                        if (window.innerWidth <= 768) {
-                            sidebar.classList.remove('active');
-                            sidebar.classList.add('sidebar-hidden');
-                        }
-                    });
+                    card.addEventListener('click', () => selectCharacter(key));
                     characterList.appendChild(card);
                 });
             }
@@ -542,11 +556,15 @@
             // Select a character
             function selectCharacter(key) {
                 selectedCharacter = key;
+                flirtyPlayStage = 0;
+                flirtyPlayCooldown = false;
+                flirtyPlayButton.disabled = false;
                 conversationHistory = [];
                 const char = characters[key];
                 characterAvatar.src = char.avatar;
                 characterAvatar.style.display = 'block';
                 characterName.textContent = char.name;
+                flirtyPlayButton.style.display = 'block';
                 chatDisplay.innerHTML = `<div class="chat-message bot-message">${char.greeting}</div>`;
                 conversationHistory.push({ role: "bot", content: char.greeting });
                 chatDisplay.scrollTop = chatDisplay.scrollHeight;
@@ -563,8 +581,8 @@
 - Keep replies short, engaging, and conversational (1-2 sentences, no more than 50 words).
 - Use varied phrasing to avoid repetition, reflecting ${charData.name}'s unique voice.
 - Always ask a question or provide a hook to keep the conversation flowing.
-Here’s an example of how you’d respond:
-${charData.example}
+Here are examples of how you’d respond:
+${charData.examples.join('\n')}
 
 Conversation history:
 `;
@@ -614,20 +632,38 @@ Conversation history:
                 } catch (error) {
                     console.error("API Error:", error);
                     const starters = {
-                        sassy: ["Tch, you think so?", "Oh, really now?", "Hmph, what’s that supposed to mean?"],
-                        playful: ["Hehe, you think so?", "Oh, that’s cute!", "Well, aren’t you sweet?"],
-                        bold: ["Hmph, you’ve got my attention!", "Oh, you’re serious, huh?", "Tch, let’s see about that!"],
-                        confident: ["Well, I can’t argue with that!", "Oh, you’ve got a point!", "Nice, I like your thinking!"],
-                        teasing: ["Heh, you’re funny, huh?", "Oh, you’re a charmer, aren’t you?", "Well, that’s interesting!"],
-                        haughty: ["Hmph, you think you’re clever?", "Oh, mortal, how amusing!", "Tch, you dare speak to me like that?"],
-                        mysterious: ["Hmm, that’s an interesting thought…", "Oh, you’ve caught my attention!", "Well, let’s explore that…"],
-                        flirty: ["Howdy, you’re quite the talker!", "Well, sugar, that’s sweet of you!", "Oh, darlin’, you’ve got my interest!"]
+                        sassy: ["Tch, you think so, huh?", "Oh, really now? What’s that supposed to mean?", "Hmph, you’ve got some nerve—what else you got?"],
+                        playful: ["Hehe, you think so? How cute!", "Oh, that’s adorable—what else you got for me?", "Well, aren’t you a sweetie? What’s next?"],
+                        bold: ["Hmph, you’ve got my attention—now what?", "Oh, you’re serious, huh? Show me more!", "Tch, let’s see what else you’ve got!"],
+                        confident: ["Well, I can’t argue with that—what’s next?", "Oh, you’ve got a point! What else can you do?", "Nice, I like your style—keep going!"],
+                        teasing: ["Heh, you’re funny, huh? What else you got?", "Oh, you’re a charmer, aren’t you? Let’s see more!", "Well, that’s interesting—what’s your next move?"],
+                        haughty: ["Hmph, you think you’re clever? Prove it!", "Oh, mortal, how amusing—what else can you do?", "Tch, you dare speak to me like that? Impress me!"],
+                        mysterious: ["Hmm, that’s an interesting thought—what’s next?", "Oh, you’ve caught my attention… what else?", "Well, let’s explore that—what do you say?"],
+                        flirty: ["Howdy, you’re quite the talker—what’s next?", "Well, sugar, that’s sweet of you—got more for me?", "Oh, darlin’, you’ve got my interest—keep going!"]
                     };
                     const starter = starters[charData.tone][Math.floor(Math.random() * 3)];
                     const userLastWord = message.split(" ").pop().toLowerCase();
-                    return `${starter} You said ${userLastWord}, huh? What else you got for me?`;
+                    return `${starter} You mentioned ${userLastWord}, huh?`;
                 }
             }
+
+            // Flirty Play Mode
+            flirtyPlayButton.addEventListener('click', () => {
+                if (flirtyPlayCooldown) return;
+                const char = characters[selectedCharacter];
+                const message = char.flirtyPlay[flirtyPlayStage];
+                chatDisplay.innerHTML += `<div class="chat-message bot-message">${char.name}: ${message}</div>`;
+                conversationHistory.push({ role: "bot", content: message });
+                chatDisplay.scrollTop = chatDisplay.scrollHeight;
+
+                flirtyPlayStage = (flirtyPlayStage + 1) % char.flirtyPlay.length;
+                flirtyPlayCooldown = true;
+                flirtyPlayButton.disabled = true;
+                setTimeout(() => {
+                    flirtyPlayCooldown = false;
+                    flirtyPlayButton.disabled = false;
+                }, 10000); // 10-second cooldown
+            });
 
             // Send message
             async function sendMessage() {
@@ -687,9 +723,14 @@ Conversation history:
                     name,
                     tone,
                     persona,
-                    example,
+                    examples: [example],
                     greeting: `Hi, I’m ${name}! Let’s have some fun—what’s on your mind?`,
-                    avatar: "https://via.placeholder.com/50?text=" + name.charAt(0)
+                    avatar: "https://via.placeholder.com/50?text=" + name.charAt(0),
+                    flirtyPlay: [
+                        `${name} winks at you playfully. ‘Oh, you wanna play with me? Let’s see how much fun we can have!’`,
+                        `${name} giggles, stepping closer. ‘Mmm, you’re good at this! How about a little tease to keep things exciting?’`,
+                        `${name} smiles warmly, her voice soft. ‘You’re making me blush! Wanna keep going, or should we chat instead?’`
+                    ]
                 };
                 localStorage.setItem('characters', JSON.stringify(characters));
                 renderCharacterList();
