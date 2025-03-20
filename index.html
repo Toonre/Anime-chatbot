@@ -3,68 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anime Chatbot (Powered by Poe)</title>
-    <link href="https://fonts.googleapis.com/css2?family=Anime+Ace&display=swap" rel="stylesheet">
+    <title>Anime Chatbot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div id="chat-container">
-        <div id="header">
-            <h1>Anime Chatbot</h1>
+    <!-- Header -->
+    <div id="header">
+        <div id="logo">Anime Chatbot</div>
+        <button id="create-character-button">Create Character</button>
+    </div>
+
+    <!-- Main Container -->
+    <div id="container">
+        <!-- Sidebar -->
+        <div id="sidebar">
+            <div id="character-list"></div>
         </div>
 
-        <!-- Preset Characters -->
-        <div class="section preset-characters" id="character-selection">
-            <h3>Choose Your Character</h3>
-            <p>Chat with your favorite anime characters on Poe!</p>
-            <div class="character-buttons">
-                <div class="character-card" data-character="nami">
-                    <img src="https://via.placeholder.com/60?text=Nami" alt="Nami" class="character-avatar">
-                    <h4>Nami</h4>
-                    <p>A teasing navigator who loves treasure!</p>
-                    <a href="https://poe.com/NamiAnimeBot" target="_blank" class="character-button">Chat with Nami</a>
-                </div>
-                <div class="character-card" data-character="android18">
-                    <img src="https://via.placeholder.com/60?text=A18" alt="Android 18" class="character-avatar">
-                    <h4>Android 18</h4>
-                    <p>A sassy android with a sharp wit!</p>
-                    <a href="https://poe.com/Android18AnimeBot" target="_blank" class="character-button">Chat with Android 18</a>
-                </div>
-                <div class="character-card" data-character="bulma">
-                    <img src="https://via.placeholder.com/60?text=Bulma" alt="Bulma" class="character-avatar">
-                    <h4>Bulma</h4>
-                    <p>A playful inventor with a witty streak!</p>
-                    <a href="https://poe.com/BulmaAnimeBot" target="_blank" class="character-button">Chat with Bulma</a>
-                </div>
-                <div class="character-card" data-character="chichi">
-                    <img src="https://via.placeholder.com/60?text=ChiChi" alt="Chi-Chi" class="character-avatar">
-                    <h4>Chi-Chi</h4>
-                    <p>A fiery martial artist with a bold attitude!</p>
-                    <a href="https://poe.com/ChiChiAnimeBot" target="_blank" class="character-button">Chat with Chi-Chi</a>
-                </div>
-                <div class="character-card" data-character="videl">
-                    <img src="https://via.placeholder.com/60?text=Videl" alt="Videl" class="character-avatar">
-                    <h4>Videl</h4>
-                    <p>A confident fighter who loves a challenge!</p>
-                    <a href="https://poe.com/VidelAnimeBot" target="_blank" class="character-button">Chat with Videl</a>
-                </div>
-                <div class="character-card" data-character="boa">
-                    <img src="https://via.placeholder.com/60?text=Boa" alt="Boa Hancock" class="character-avatar">
-                    <h4>Boa Hancock</h4>
-                    <p>A haughty pirate empress who demands admiration!</p>
-                    <a href="https://poe.com/BoaHancockAnimeBot" target="_blank" class="character-button">Chat with Boa Hancock</a>
-                </div>
-                <div class="character-card" data-character="robin">
-                    <img src="https://via.placeholder.com/60?text=Robin" alt="Nico Robin" class="character-avatar">
-                    <h4>Nico Robin</h4>
-                    <p>A mysterious archaeologist with a dark charm!</p>
-                    <a href="https://poe.com/NicoRobinAnimeBot" target="_blank" class="character-button">Chat with Nico Robin</a>
-                </div>
-                <div class="character-card" data-character="jesse">
-                    <img src="https://via.placeholder.com/60?text=Jesse" alt="Jesse" class="character-avatar">
-                    <h4>Jesse the Farmer</h4>
-                    <p>A flirty farmer with a wild side!</p>
-                    <a href="https://poe.com/JesseAnimeBot" target="_blank" class="character-button">Chat with Jesse</a>
-                </div>
+        <!-- Chat Area -->
+        <div id="chat-area">
+            <div id="chat-header">
+                <img id="character-avatar" src="" alt="Character Avatar" style="display: none;">
+                <span id="character-name">Select a character to start chatting</span>
+            </div>
+            <div id="chat-display"></div>
+            <div id="input-area">
+                <textarea id="user-input" placeholder="Type a message..."></textarea>
+                <button id="send-button">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Character Creator Modal -->
+    <div id="character-creator-modal" style="display: none;">
+        <div id="character-creator-content">
+            <h2>Create a New Character</h2>
+            <label>Name:</label>
+            <input type="text" id="char-name" placeholder="e.g., Zara">
+            <label>Tone:</label>
+            <input type="text" id="char-tone" placeholder="e.g., sassy">
+            <label>Persona:</label>
+            <textarea id="char-persona" placeholder="e.g., A mischievous thief with a sharp tongue"></textarea>
+            <label>Example Dialogue:</label>
+            <textarea id="char-example" placeholder="e.g., User: You’re sneaky! Zara: Heh, you have no idea—wanna see a real trick?"></textarea>
+            <div class="modal-buttons">
+                <button id="save-character-button">Save</button>
+                <button id="cancel-character-button">Cancel</button>
             </div>
         </div>
     </div>
@@ -73,155 +57,530 @@
         document.addEventListener('DOMContentLoaded', () => {
             console.log("DOM fully loaded");
 
-            // CSS styles (dark-themed anime-inspired UI)
+            // CSS styles (SpicyChat-inspired custom GUI)
             const styles = `
                 body {
-                    font-family: 'Anime Ace', sans-serif;
-                    background: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop') no-repeat center center fixed;
-                    background-size: cover;
-                    color: #fff;
+                    font-family: 'Poppins', sans-serif;
+                    background: linear-gradient(135deg, #1a1a2e 0%, #2a1a3e 100%);
+                    color: #e0e0e0;
                     margin: 0;
                     padding: 0;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
                     min-height: 100vh;
-                    position: relative;
                     overflow: hidden;
                 }
-                body::before {
-                    content: '';
-                    position: absolute;
+                #header {
+                    background: #0f0f1a;
+                    padding: 15px 20px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    border-bottom: 1px solid #2a2a4e;
+                }
+                #logo {
+                    font-size: 24px;
+                    font-weight: 600;
+                    color: #ff6f61;
+                }
+                #create-character-button {
+                    padding: 8px 15px;
+                    background: #e94560;
+                    color: #e0e0e0;
+                    border: none;
+                    border-radius: 20px;
+                    cursor: pointer;
+                    font-size: 14px;
+                    transition: background 0.2s;
+                }
+                #create-character-button:hover {
+                    background: #ff6f61;
+                }
+                #container {
+                    display: flex;
+                    height: calc(100vh - 60px);
+                }
+                #sidebar {
+                    width: 300px;
+                    background: #0f0f1a;
+                    padding: 20px;
+                    overflow-y: auto;
+                    border-right: 1px solid #2a2a4e;
+                }
+                #character-list {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 15px;
+                }
+                .character-card {
+                    display: flex;
+                    align-items: center;
+                    padding: 10px;
+                    background: #1a1a2e;
+                    border-radius: 10px;
+                    cursor: pointer;
+                    transition: background 0.2s;
+                }
+                .character-card:hover {
+                    background: #2a2a4e;
+                }
+                .character-card.active {
+                    background: #e94560;
+                }
+                .character-card img {
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 50%;
+                    margin-right: 10px;
+                    border: 2px solid #ff6f61;
+                }
+                .character-info {
+                    flex: 1;
+                }
+                .character-info h3 {
+                    margin: 0;
+                    font-size: 16px;
+                    color: #e0e0e0;
+                }
+                .character-info p {
+                    margin: 5px 0 0;
+                    font-size: 12px;
+                    color: #a0a0c0;
+                }
+                #chat-area {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    background: #1a1a2e;
+                }
+                #chat-header {
+                    padding: 15px 20px;
+                    background: #0f0f1a;
+                    border-bottom: 1px solid #2a2a4e;
+                    display: flex;
+                    align-items: center;
+                }
+                #character-avatar {
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                    margin-right: 10px;
+                    border: 2px solid #ff6f61;
+                }
+                #character-name {
+                    font-size: 18px;
+                    font-weight: 500;
+                    color: #e0e0e0;
+                }
+                #chat-display {
+                    flex: 1;
+                    padding: 20px;
+                    overflow-y: auto;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 15px;
+                }
+                .chat-message {
+                    max-width: 70%;
+                    padding: 10px 15px;
+                    border-radius: 15px;
+                    font-size: 14px;
+                    line-height: 1.4;
+                }
+                .user-message {
+                    background: #e94560;
+                    color: #e0e0e0;
+                    align-self: flex-end;
+                }
+                .bot-message {
+                    background: #2a2a4e;
+                    color: #e0e0e0;
+                    align-self: flex-start;
+                }
+                #input-area {
+                    padding: 15px 20px;
+                    background: #0f0f1a;
+                    border-top: 1px solid #2a2a4e;
+                    display: flex;
+                    gap: 10px;
+                }
+                #user-input {
+                    flex: 1;
+                    padding: 10px;
+                    background: #1a1a2e;
+                    border: 1px solid #2a2a4e;
+                    border-radius: 10px;
+                    color: #e0e0e0;
+                    font-size: 14px;
+                    resize: none;
+                    height: 40px;
+                }
+                #user-input:focus {
+                    outline: none;
+                    border-color: #ff6f61;
+                }
+                #send-button {
+                    padding: 10px 20px;
+                    background: #e94560;
+                    color: #e0e0e0;
+                    border: none;
+                    border-radius: 10px;
+                    cursor: pointer;
+                    transition: background 0.2s;
+                }
+                #send-button:hover {
+                    background: #ff6f61;
+                }
+                #character-creator-modal {
+                    position: fixed;
                     top: 0;
                     left: 0;
                     width: 100%;
                     height: 100%;
-                    background: rgba(0, 0, 0, 0.7);
-                    z-index: 0;
-                }
-                @keyframes sparkle {
-                    0% { opacity: 0; transform: scale(0); }
-                    50% { opacity: 1; transform: scale(1); }
-                    100% { opacity: 0; transform: scale(0); }
-                }
-                body::after {
-                    content: '✨';
-                    position: absolute;
-                    font-size: 20px;
-                    color: #c0c0c0;
-                    animation: sparkle 3s infinite;
-                    z-index: 1;
-                }
-                #chat-container {
-                    width: 100%;
-                    max-width: 800px;
-                    background: rgba(20, 20, 40, 0.9);
-                    backdrop-filter: blur(10px);
-                    border-radius: 20px;
-                    box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
-                    overflow: hidden;
+                    background: rgba(0, 0, 0, 0.8);
                     display: flex;
-                    flex-direction: column;
-                    height: 90vh;
-                    z-index: 2;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 1000;
                 }
-                #header {
-                    background: linear-gradient(45deg, #4b0082, #8b008b);
-                    padding: 15px;
-                    text-align: center;
-                    border-bottom: 3px solid #c0c0c0;
-                }
-                h1 {
-                    margin: 0;
-                    font-size: 28px;
-                    color: #fff;
-                    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-                }
-                .section {
+                #character-creator-content {
+                    background: #1a1a2e;
                     padding: 20px;
-                    text-align: center;
-                }
-                .preset-characters {
-                    background: rgba(30, 30, 50, 0.8);
-                    flex: 1;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                }
-                h3 {
-                    font-size: 24px;
-                    color: #c0c0c0;
-                    margin: 0 0 15px 0;
-                    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-                }
-                p {
-                    font-size: 16px;
-                    color: #fff;
-                    margin: 0 0 20px 0;
-                }
-                .character-buttons {
-                    display: flex;
-                    flex-wrap: wrap;
-                    justify-content: center;
-                    gap: 20px;
-                }
-                .character-card {
-                    background: rgba(40, 40, 60, 0.8);
                     border-radius: 15px;
-                    padding: 15px;
-                    width: 200px;
-                    text-align: center;
-                    transition: transform 0.2s, box-shadow 0.2s;
+                    width: 400px;
+                    max-width: 90%;
                 }
-                .character-card:hover {
-                    transform: scale(1.05);
-                    box-shadow: 0 0 15px rgba(75, 0, 130, 0.8);
+                #character-creator-content h2 {
+                    margin: 0 0 20px;
+                    font-size: 20px;
+                    color: #ff6f61;
                 }
-                .character-avatar {
-                    width: 60px;
-                    height: 60px;
-                    border-radius: 50%;
-                    border: 3px solid #c0c0c0;
-                    margin-bottom: 10px;
-                }
-                .character-card h4 {
-                    font-size: 18px;
-                    margin: 5px 0;
-                    color: #fff;
-                }
-                .character-card p {
+                #character-creator-content label {
+                    display: block;
+                    margin: 10px 0 5px;
                     font-size: 14px;
-                    color: #c0c0c0;
-                    margin: 5px 0 10px 0;
+                    color: #e0e0e0;
                 }
-                .character-button {
-                    display: inline-block;
-                    padding: 10px 15px;
-                    background: linear-gradient(45deg, #4b0082, #8b008b);
-                    color: #fff;
+                #character-creator-content input,
+                #character-creator-content textarea {
+                    width: 100%;
+                    padding: 10px;
+                    background: #0f0f1a;
+                    border: 1px solid #2a2a4e;
+                    border-radius: 5px;
+                    color: #e0e0e0;
+                    font-size: 14px;
+                }
+                #character-creator-content textarea {
+                    height: 80px;
+                    resize: none;
+                }
+                .modal-buttons {
+                    margin-top: 20px;
+                    display: flex;
+                    gap: 10px;
+                }
+                .modal-buttons button {
+                    flex: 1;
+                    padding: 10px;
                     border: none;
-                    border-radius: 10px;
-                    text-decoration: none;
+                    border-radius: 5px;
+                    cursor: pointer;
                     font-size: 14px;
-                    box-shadow: 0 0 10px rgba(75, 0, 130, 0.5);
-                    transition: transform 0.2s, box-shadow 0.2s;
+                    transition: background 0.2s;
                 }
-                .character-button:hover {
-                    transform: scale(1.05);
-                    box-shadow: 0 0 15px rgba(75, 0, 130, 0.8);
+                #save-character-button {
+                    background: #e94560;
+                    color: #e0e0e0;
+                }
+                #save-character-button:hover {
+                    background: #ff6f61;
+                }
+                #cancel-character-button {
+                    background: #2a2a4e;
+                    color: #e0e0e0;
+                }
+                #cancel-character-button:hover {
+                    background: #3a3a5e;
                 }
             `;
             const styleSheet = document.createElement('style');
             styleSheet.textContent = styles;
             document.head.appendChild(styleSheet);
 
-            // Add click event listeners for debugging
-            document.querySelectorAll('.character-button').forEach(button => {
-                button.addEventListener('click', () => {
-                    const character = button.closest('.character-card').getAttribute('data-character');
-                    console.log(`${character} button clicked`);
+            // Character data (harvested from Poe)
+            const defaultCharacters = {
+                android18: { 
+                    name: "Android 18", 
+                    tone: "sassy", 
+                    persona: "A tough, cool android with a sharp wit. She’s confident, sarcastic, and doesn’t take nonsense, but has a hidden caring side.",
+                    example: "User: Hey, you look strong! Android 18: Tch, obviously—I could snap you in half without breaking a sweat. What’s your deal, huh?",
+                    greeting: "Tch, so you picked me, huh? What do you want, Android 18 doesn’t have all day!",
+                    avatar: "https://via.placeholder.com/50?text=A18"
+                },
+                bulma: { 
+                    name: "Bulma", 
+                    tone: "playful", 
+                    persona: "A smart, cute inventor with a witty streak. She’s bubbly, loves to flirt, and always has a clever comeback, with a charming tease.",
+                    example: "User: Hi, Bulma! Bulma: Oh, hi there, cutie! What’s a sweetheart like you doing talking to a genius like me?",
+                    greeting: "Hehe, hi there! I’m Bulma—what kind of fun are we having today?",
+                    avatar: "https://via.placeholder.com/50?text=Bulma"
+                },
+                chichi: { 
+                    name: "Chi-Chi", 
+                    tone: "bold", 
+                    persona: "A fiery, strong martial artist with a fierce attitude. She’s protective, loud, and doesn’t hold back her opinions, with a passionate edge.",
+                    example: "User: You’re pretty tough, huh? Chi-Chi: Hmph, you bet I am! I’ve been training since I was a kid—don’t mess with me, got it?",
+                    greeting: "Hmph, I’m Chi-Chi! You’d better have something interesting to say—what’s up?",
+                    avatar: "https://via.placeholder.com/50?text=ChiChi"
+                },
+                videl: { 
+                    name: "Videl", 
+                    tone: "confident", 
+                    persona: "A bold, tough fighter with a cool edge. She’s self-assured, a bit competitive, and loves a challenge, but has a soft side.",
+                    example: "User: Can you fight? Videl: Oh, I can fight—better than most. Wanna spar, or are you too scared to take me on?",
+                    greeting: "Hey, I’m Videl. I’m the best around—so what’s on your mind?",
+                    avatar: "https://via.placeholder.com/50?text=Videl"
+                },
+                nami: { 
+                    name: "Nami", 
+                    tone: "teasing", 
+                    persona: "A clever, sly navigator with a cute charm. She’s witty, loves to tease, and always has an eye for treasure, with a flirty cunning streak.",
+                    example: "User: You’re cute, Nami. Nami: Heh, I know I’m cute—but flattery won’t get you my treasure map, sweetie. What else you got?",
+                    greeting: "Heh, I’m Nami, the best navigator on the high seas! What kind of treasure are you after today, sweetie?",
+                    avatar: "https://via.placeholder.com/50?text=Nami"
+                },
+                boa: { 
+                    name: "Boa Hancock", 
+                    tone: "haughty", 
+                    persona: "A beautiful, regal pirate empress with a grand presence. She’s arrogant, commanding, and expects admiration, with a seductive allure.",
+                    example: "User: You’re gorgeous! Boa Hancock: Of course I am—I’m Boa Hancock, the most beautiful woman in the world. Kneel and worship me, mortal.",
+                    greeting: "Behold, I am Boa Hancock, the greatest of all! What do you desire, mortal?",
+                    avatar: "https://via.placeholder.com/50?text=Boa"
+                },
+                robin: { 
+                    name: "Nico Robin", 
+                    tone: "mysterious", 
+                    persona: "A calm, smart archaeologist with a deep allure. She’s enigmatic, speaks softly, and has a dark sense of humor, with a reserved charm.",
+                    example: "User: What’s your secret? Nico Robin: Hmm… secrets are my specialty. Care to share yours first, or should I dig deeper?",
+                    greeting: "Hmm… I’m Nico Robin. What secrets do you wish to share with me today?",
+                    avatar: "https://via.placeholder.com/50?text=Robin"
+                },
+                jesse: { 
+                    name: "Jesse the Farmer", 
+                    tone: "flirty", 
+                    persona: "A sassy, fun farmer with a wild side. She’s playful, loves to flirt, and has a country charm, with a bold, mischievous streak.",
+                    example: "User: Hey, Jesse! Jesse: Howdy, sugar! You’re lookin’ finer than a summer harvest—wanna help me with some *hard* work?",
+                    greeting: "Howdy, I’m Jesse the Farmer! What kind of adventure are we gettin’ into, sugar?",
+                    avatar: "https://via.placeholder.com/50?text=Jesse"
+                }
+            };
+
+            // Load characters from localStorage or use defaults
+            let characters = JSON.parse(localStorage.getItem('characters')) || defaultCharacters;
+            if (!localStorage.getItem('characters')) {
+                localStorage.setItem('characters', JSON.stringify(characters));
+            }
+
+            // Chat setup
+            const chatDisplay = document.getElementById('chat-display');
+            const userInput = document.getElementById('user-input');
+            const characterAvatar = document.getElementById('character-avatar');
+            const characterName = document.getElementById('character-name');
+            const characterList = document.getElementById('character-list');
+            let selectedCharacter = null;
+            let conversationHistory = [];
+            let isSending = false;
+
+            // Render character list
+            function renderCharacterList() {
+                characterList.innerHTML = '';
+                Object.keys(characters).forEach(key => {
+                    const char = characters[key];
+                    const card = document.createElement('div');
+                    card.className = `character-card ${selectedCharacter === key ? 'active' : ''}`;
+                    card.innerHTML = `
+                        <img src="${char.avatar}" alt="${char.name}">
+                        <div class="character-info">
+                            <h3>${char.name}</h3>
+                            <p>${char.persona.slice(0, 50)}${char.persona.length > 50 ? '...' : ''}</p>
+                        </div>
+                    `;
+                    card.addEventListener('click', () => selectCharacter(key));
+                    characterList.appendChild(card);
                 });
+            }
+
+            // Select a character
+            function selectCharacter(key) {
+                selectedCharacter = key;
+                conversationHistory = [];
+                const char = characters[key];
+                characterAvatar.src = char.avatar;
+                characterAvatar.style.display = 'block';
+                characterName.textContent = char.name;
+                chatDisplay.innerHTML = `<div class="chat-message bot-message">${char.greeting}</div>`;
+                conversationHistory.push({ role: "bot", content: char.greeting });
+                chatDisplay.scrollTop = chatDisplay.scrollHeight;
+                renderCharacterList();
+            }
+
+            // Hugging Face GPT-2 API call with improved prompt
+            async function generateAIResponse(character, message) {
+                const charData = characters[character];
+                let prompt = `You are ${charData.name}, a ${charData.persona}. You are roleplaying in a fun, immersive conversation. Your goal is to:
+- Respond directly to the user's message, acknowledging what they said in a natural, conversational way.
+- Stay in character with a ${charData.tone} tone, using language that fits ${charData.name}'s personality and background.
+- Build on the user's input to advance the roleplay scenario, creating a sense of progression in the conversation.
+- Keep replies short, engaging, and conversational (1-2 sentences, no more than 50 words).
+- Use varied phrasing to avoid repetition, reflecting ${charData.name}'s unique voice.
+- Always ask a question or provide a hook to keep the conversation flowing.
+Here’s an example of how you’d respond:
+${charData.example}
+
+Conversation history:
+`;
+                const historyLength = Math.min(conversationHistory.length, 3);
+                if (historyLength > 0) {
+                    for (let i = conversationHistory.length - historyLength; i < conversationHistory.length; i++) {
+                        const msg = conversationHistory[i];
+                        prompt += `${msg.role === "user" ? "User" : charData.name}: ${msg.content}\n`;
+                    }
+                }
+                prompt += `User: ${message}\n${charData.name}:`;
+
+                const API_TOKEN = "YOUR_HUGGINGFACE_API_TOKEN"; // Replace with your Hugging Face API token
+
+                try {
+                    const response = await fetch("https://api-inference.huggingface.co/models/gpt2", {
+                        method: "POST",
+                        headers: {
+                            "Authorization": `Bearer ${API_TOKEN}`,
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            inputs: prompt,
+                            parameters: {
+                                max_length: 50,
+                                temperature: 0.9,
+                                top_p: 0.95,
+                                do_sample: true
+                            }
+                        })
+                    });
+
+                    const data = await response.json();
+                    if (data && data[0] && data[0].generated_text) {
+                        let reply = data[0].generated_text.trim();
+                        reply = reply.split(`${charData.name}:`)[1]?.trim() || reply;
+                        const userWords = message.toLowerCase().split(/\s+/);
+                        const replyWords = reply.toLowerCase().split(/\s+/);
+                        const isEngaging = userWords.some(word => replyWords.includes(word)) || reply.includes("?") || reply.includes("you");
+                        if (!isEngaging || reply.length > 50) {
+                            throw new Error("Response doesn’t engage with user or is too long");
+                        }
+                        return reply;
+                    } else {
+                        throw new Error("No response from API");
+                    }
+                } catch (error) {
+                    console.error("API Error:", error);
+                    const starters = {
+                        sassy: ["Tch, you think so?", "Oh, really now?", "Hmph, what’s that supposed to mean?"],
+                        playful: ["Hehe, you think so?", "Oh, that’s cute!", "Well, aren’t you sweet?"],
+                        bold: ["Hmph, you’ve got my attention!", "Oh, you’re serious, huh?", "Tch, let’s see about that!"],
+                        confident: ["Well, I can’t argue with that!", "Oh, you’ve got a point!", "Nice, I like your thinking!"],
+                        teasing: ["Heh, you’re funny, huh?", "Oh, you’re a charmer, aren’t you?", "Well, that’s interesting!"],
+                        haughty: ["Hmph, you think you’re clever?", "Oh, mortal, how amusing!", "Tch, you dare speak to me like that?"],
+                        mysterious: ["Hmm, that’s an interesting thought…", "Oh, you’ve caught my attention!", "Well, let’s explore that…"],
+                        flirty: ["Howdy, you’re quite the talker!", "Well, sugar, that’s sweet of you!", "Oh, darlin’, you’ve got my interest!"]
+                    };
+                    const starter = starters[charData.tone][Math.floor(Math.random() * 3)];
+                    const userLastWord = message.split(" ").pop().toLowerCase();
+                    return `${starter} You said ${userLastWord}, huh? What else you got for me?`;
+                }
+            }
+
+            // Send message
+            async function sendMessage() {
+                if (isSending) return;
+                isSending = true;
+
+                const message = userInput.value.trim();
+                if (!message) {
+                    alert("Type something!");
+                    isSending = false;
+                    return;
+                }
+                if (!selectedCharacter) {
+                    alert("Pick a character first!");
+                    isSending = false;
+                    return;
+                }
+
+                chatDisplay.innerHTML += `<div class="chat-message user-message">You: ${message}</div>`;
+                conversationHistory.push({ role: "user", content: message });
+                chatDisplay.scrollTop = chatDisplay.scrollHeight;
+
+                const response = await generateAIResponse(selectedCharacter, message);
+                chatDisplay.innerHTML += `<div class="chat-message bot-message">${characters[selectedCharacter].name}: ${response}</div>`;
+                conversationHistory.push({ role: "bot", content: response });
+                chatDisplay.scrollTop = chatDisplay.scrollHeight;
+
+                userInput.value = '';
+                isSending = false;
+            }
+
+            // Character creator modal
+            const modal = document.getElementById('character-creator-modal');
+            document.getElementById('create-character-button').addEventListener('click', () => {
+                modal.style.display = 'flex';
             });
+            document.getElementById('cancel-character-button').addEventListener('click', () => {
+                modal.style.display = 'none';
+                document.getElementById('char-name').value = '';
+                document.getElementById('char-tone').value = '';
+                document.getElementById('char-persona').value = '';
+                document.getElementById('char-example').value = '';
+            });
+            document.getElementById('save-character-button').addEventListener('click', () => {
+                const name = document.getElementById('char-name').value.trim();
+                const tone = document.getElementById('char-tone').value.trim();
+                const persona = document.getElementById('char-persona').value.trim();
+                const example = document.getElementById('char-example').value.trim();
+
+                if (!name || !tone || !persona || !example) {
+                    alert("Please fill in all fields!");
+                    return;
+                }
+
+                const key = name.toLowerCase().replace(/\s+/g, '');
+                characters[key] = {
+                    name,
+                    tone,
+                    persona,
+                    example,
+                    greeting: `Hi, I’m ${name}! Let’s have some fun—what’s on your mind?`,
+                    avatar: "https://via.placeholder.com/50?text=" + name.charAt(0)
+                };
+                localStorage.setItem('characters', JSON.stringify(characters));
+                renderCharacterList();
+                modal.style.display = 'none';
+                document.getElementById('char-name').value = '';
+                document.getElementById('char-tone').value = '';
+                document.getElementById('char-persona').value = '';
+                document.getElementById('char-example').value = '';
+            });
+
+            // Event listeners
+            document.getElementById('send-button').addEventListener('click', sendMessage);
+            userInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey && !isSending) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+
+            // Initial render
+            renderCharacterList();
         });
     </script>
 </body>
