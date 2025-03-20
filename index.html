@@ -59,7 +59,7 @@
         <div id="flirty-game-content">
             <h2>Flirty Clicker Game</h2>
             <div id="flirty-game-display">
-                <img id="flirty-game-avatar" src="" alt="Character Avatar">
+                <video id="flirty-game-video" loop muted playsinline style="width: 100%; max-width: 200px; border-radius: 10px; border: 2px solid #ff6f61;"></video>
                 <p id="flirty-game-message">Click to start flirting!</p>
             </div>
             <div id="flirty-game-stats">
@@ -353,13 +353,6 @@
                 #flirty-game-display {
                     text-align: center;
                 }
-                #flirty-game-avatar {
-                    width: 5rem;
-                    height: 5rem;
-                    border-radius: 50%;
-                    border: 2px solid #ff6f61;
-                    margin-bottom: 1rem;
-                }
                 #flirty-game-message {
                     font-size: 0.9rem;
                     color: #e0e0e0;
@@ -434,9 +427,8 @@
                     #send-button {
                         font-size: 1rem;
                     }
-                    #flirty-game-avatar {
-                        width: 6rem;
-                        height: 6rem;
+                    #flirty-game-video {
+                        max-width: 300px;
                     }
                     #flirty-game-message {
                         font-size: 1rem;
@@ -451,8 +443,8 @@
             document.head.appendChild(styleSheet);
 
             // Character data (harvested from Poe, with more example dialogues)
-            // Note: The 'avatar' field for each character is a placeholder URL. To use real images,
-            // replace these URLs with links to actual images hosted online (e.g., upload to Imgur or another image hosting service).
+            // Note: The 'avatar' and 'flirtyVideo' fields for each character are placeholder URLs.
+            // Replace these with links to actual images and MP4 videos hosted online (e.g., upload to Imgur for images, Cloudinary for videos).
             const defaultCharacters = {
                 android18: { 
                     name: "Android 18", 
@@ -464,6 +456,7 @@
                     ],
                     greeting: "Tch, so you picked me, huh? What do you want, Android 18 doesn’t have all day!",
                     avatar: "https://via.placeholder.com/50?text=A18",
+                    flirtyVideo: "https://example.com/videos/android18-flirty.mp4", // Placeholder: Replace with a real MP4 URL showing Android 18 smirking and flexing playfully
                     flirtyGame: {
                         low: "Android 18 smirks, crossing her arms. ‘Oh, you wanna flirt, huh? Let’s see if you can keep up with me!’",
                         mid: "Android 18 steps closer, her voice teasing. ‘Not bad—you’ve got some moves! How about we heat things up a bit?’",
@@ -485,6 +478,7 @@
                     ],
                     greeting: "Hehe, hi there! I’m Bulma—what kind of fun are we having today?",
                     avatar: "https://via.placeholder.com/50?text=Bulma",
+                    flirtyVideo: "https://example.com/videos/bulma-flirty.mp4", // Placeholder: Replace with a real MP4 URL showing Bulma twirling her hair and winking
                     flirtyGame: {
                         low: "Bulma twirls her hair, giggling. ‘Oh, you’re a flirt, huh? Let’s see if you can handle my charm!’",
                         mid: "Bulma winks, leaning in. ‘Mmm, you’re good at this! How about we make things a little more exciting?’",
@@ -506,6 +500,7 @@
                     ],
                     greeting: "Hmph, I’m Chi-Chi! You’d better have something interesting to say—what’s up?",
                     avatar: "https://via.placeholder.com/50?text=ChiChi",
+                    flirtyVideo: "https://example.com/videos/chichi-flirty.mp4", // Placeholder: Replace with a real MP4 URL showing Chi-Chi flexing her muscles and grinning
                     flirtyGame: {
                         low: "Chi-Chi smirks, her eyes fiery. ‘You wanna flirt with me, huh? Let’s see if you can handle my strength!’",
                         mid: "Chi-Chi grabs your hand, grinning. ‘Not bad! Let’s get a little closer and see what you’ve got!’",
@@ -527,6 +522,7 @@
                     ],
                     greeting: "Hey, I’m Videl. I’m the best around—so what’s on your mind?",
                     avatar: "https://via.placeholder.com/50?text=Videl",
+                    flirtyVideo: "https://example.com/videos/videl-flirty.mp4", // Placeholder: Replace with a real MP4 URL showing Videl stretching and winking
                     flirtyGame: {
                         low: "Videl grins, stepping closer. ‘You wanna flirt, huh? Let’s see if you can keep up with me!’",
                         mid: "Videl nudges you playfully. ‘Not bad at all! Let’s make things a bit more exciting, shall we?’",
@@ -548,6 +544,7 @@
                     ],
                     greeting: "Heh, I’m Nami, the best navigator on the high seas! What kind of treasure are you after today, sweetie?",
                     avatar: "https://via.placeholder.com/50?text=Nami",
+                    flirtyVideo: "https://example.com/videos/nami-flirty.mp4", // Placeholder: Replace with a real MP4 URL showing Nami swaying her hips and blowing a kiss
                     flirtyGame: {
                         low: "Nami winks at you playfully. ‘Oh, you wanna flirt, sweetie? Let’s see how bold you are!’",
                         mid: "Nami sways her hips, giggling. ‘Mmm, you’re getting me all flustered—don’t stop now!’",
@@ -569,6 +566,7 @@
                     ],
                     greeting: "Behold, I am Boa Hancock, the greatest of all! What do you desire, mortal?",
                     avatar: "https://via.placeholder.com/50?text=Boa",
+                    flirtyVideo: "https://example.com/videos/boa-flirty.mp4", // Placeholder: Replace with a real MP4 URL showing Boa Hancock posing regally and smirking
                     flirtyGame: {
                         low: "Boa Hancock smirks regally. ‘You dare to flirt with me, mortal? Show me your devotion!’",
                         mid: "Boa Hancock brushes her hair back, her voice sultry. ‘Not bad for a mortal! Shall I reward you with my affection?’",
@@ -590,6 +588,7 @@
                     ],
                     greeting: "Hmm… I’m Nico Robin. What secrets do you wish to share with me today?",
                     avatar: "https://via.placeholder.com/50?text=Robin",
+                    flirtyVideo: "https://example.com/videos/robin-flirty.mp4", // Placeholder: Replace with a real MP4 URL showing Nico Robin smiling softly and flipping a page in her book
                     flirtyGame: {
                         low: "Nico Robin smiles softly, her voice low. ‘You want to flirt with me? Let’s see how deep this goes…’",
                         mid: "Nico Robin leans in, her gaze intense. ‘You’re quite intriguing… let’s make this a bit more exciting.’",
@@ -611,6 +610,7 @@
                     ],
                     greeting: "Howdy, I’m Jesse the Farmer! What kind of adventure are we gettin’ into, sugar?",
                     avatar: "https://via.placeholder.com/50?text=Jesse",
+                    flirtyVideo: "https://example.com/videos/jesse-flirty.mp4", // Placeholder: Replace with a real MP4 URL showing Jesse winking and swaying her hips with a pitchfork in hand
                     flirtyGame: {
                         low: "Jesse winks, tipping her hat. ‘Well, howdy there, sugar! Let’s have some fun—show me what you’ve got!’",
                         mid: "Jesse giggles, twirling a strand of hair. ‘Oh, you’re a charmer! Let’s spice things up a bit!’",
@@ -644,7 +644,7 @@
             const characterList = document.getElementById('character-list');
             const flirtyGameButton = document.getElementById('flirty-game-button');
             const flirtyGameModal = document.getElementById('flirty-game-modal');
-            const flirtyGameAvatar = document.getElementById('flirty-game-avatar');
+            const flirtyGameVideo = document.getElementById('flirty-game-video');
             const flirtyGameMessage = document.getElementById('flirty-game-message');
             const flirtPointsDisplay = document.getElementById('flirt-points');
             const flirtHighScoreDisplay = document.getElementById('flirt-high-score');
@@ -656,6 +656,8 @@
             let flirtPoints = 0;
             let flirtClickCooldown = false;
             let earnedRewards = [];
+            let lastClickTime = null;
+            let clickTimes = [];
 
             // Render character list
             function renderCharacterList() {
@@ -802,8 +804,12 @@ Conversation history:
                 if (!selectedCharacter) return;
                 flirtPoints = 0;
                 earnedRewards = [];
+                clickTimes = [];
+                lastClickTime = null;
                 const char = characters[selectedCharacter];
-                flirtyGameAvatar.src = char.avatar;
+                flirtyGameVideo.src = char.flirtyVideo;
+                flirtyGameVideo.play();
+                flirtyGameVideo.playbackRate = 1.0; // Default speed
                 flirtyGameMessage.textContent = "Click to start flirting!";
                 flirtPointsDisplay.textContent = flirtPoints;
                 flirtHighScoreDisplay.textContent = highScores[selectedCharacter] || 0;
@@ -819,7 +825,28 @@ Conversation history:
                 setTimeout(() => {
                     flirtClickCooldown = false;
                     flirtClickButton.disabled = false;
-                }, 1000); // 1-second cooldown
+                }, 100); // 100ms cooldown to prevent spamming
+
+                const currentTime = Date.now();
+                if (lastClickTime) {
+                    clickTimes.push(currentTime - lastClickTime);
+                    if (clickTimes.length > 5) clickTimes.shift(); // Keep last 5 click intervals
+                }
+                lastClickTime = currentTime;
+
+                // Calculate clicks per second (CPS)
+                const avgClickInterval = clickTimes.length > 0 ? clickTimes.reduce((a, b) => a + b, 0) / clickTimes.length : 1000;
+                const cps = 1000 / avgClickInterval;
+
+                // Adjust video playback speed based on CPS
+                // CPS < 1: Slow (0.5x), CPS 1-3: Normal (1x), CPS > 3: Fast (up to 2x)
+                if (cps < 1) {
+                    flirtyGameVideo.playbackRate = 0.5;
+                } else if (cps <= 3) {
+                    flirtyGameVideo.playbackRate = 1.0;
+                } else {
+                    flirtyGameVideo.playbackRate = Math.min(2.0, cps / 3); // Cap at 2x speed
+                }
 
                 const char = characters[selectedCharacter];
                 flirtPoints++;
@@ -858,6 +885,9 @@ Conversation history:
 
             document.getElementById('close-flirty-game-button').addEventListener('click', () => {
                 flirtyGameModal.style.display = 'none';
+                flirtyGameVideo.pause();
+                flirtyGameVideo.currentTime = 0;
+                flirtyGameVideo.playbackRate = 1.0;
             });
 
             // Character creator modal
@@ -891,6 +921,7 @@ Conversation history:
                     examples: [example],
                     greeting: `Hi, I’m ${name}! Let’s have some fun—what’s on your mind?`,
                     avatar: "https://via.placeholder.com/50?text=" + name.charAt(0),
+                    flirtyVideo: "https://example.com/videos/default-flirty.mp4", // Placeholder for custom characters
                     flirtyGame: {
                         low: `${name} winks at you playfully. ‘Oh, you wanna flirt with me? Let’s see how much fun we can have!’`,
                         mid: `${name} giggles, stepping closer. ‘Mmm, you’re good at this! Let’s make things a bit more exciting!’`,
