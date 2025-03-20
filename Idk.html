@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime Chatbot (Poly AI Style)</title>
+</head>
+<body>
+    <div id="chat-container">
+        <h1>Anime Character Chatbot</h1>
+
+        <!-- Preset Characters -->
+        <div class="section preset-characters">
+            <h3>Choose Character</h3>
+            <button onclick="selectCharacter('android18')">Android 18</button>
+            <button onclick="selectCharacter('bulma')">Bulma</button>
+            <button onclick="selectCharacter('chichi')">Chi-Chi</button>
+            <button onclick="selectCharacter('videl')">Videl</button>
+            <button onclick="selectCharacter('nami')">Nami</button>
+            <button onclick="selectCharacter('boa')">Boa Hancock</button>
+            <button onclick="selectCharacter('robin')">Nico Robin</button>
+            <button onclick="selectCharacter('jesse')">Jesse the Farmer</button>
+        </div>
+
+        <!-- NSFW Toggle -->
+        <div class="section">
+            <button id="nsfw-toggle" onclick="toggleNSFW()">NSFW (Off)</button>
+        </div>
+
+        <!-- Chat Display -->
+        <div id="chat-display">
+            <div class="chat-message">Pick a character to chat!</div>
+        </div>
+
+        <!-- User Input -->
+        <div class="section">
+            <input type="text" id="user-input" placeholder="Say something..." style="width: 70%; padding: 5px;">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        // CSS styles (mobile-friendly)
+        const styles = `
+            body { font-family: Arial, sans-serif; background-color: #f0f0f0; margin: 0; padding: 10px; }
+            #chat-container { width: 100%; max-width: 600px; background-color: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); margin: auto; }
+            h1 { text-align: center; color: #333; font-size: 20px; }
+            h3 { font-size: 16px; text-align: center; }
+            .section { margin-bottom: 15px; }
+            button { padding: 8px; background-color: #ff4444; color: white; border: none; border-radius: 5px; cursor: pointer; margin: 5px; width: 45%; font-size: 14px; }
+            button:hover { background-color: #ff6666; }
+            #chat-display { padding: 10px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 5px; max-height: 200px; overflow-y: auto; font-size: 14px; }
+            .chat-message { margin: 8px 0; }
+            .user-message { color: #0066cc; font-weight: bold; }
+            .bot-message { color: #cc0066; }
+            .preset-characters { display: flex; flex-wrap: wrap; justify-content: center; }
+            #nsfw-toggle { background-color: #666; width: auto; padding: 5px 10px; }
+            #nsfw-toggle:hover { background-color: #999; }
+            input { font-size: 14px; }
+        `;
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = styles;
+        document.head.appendChild(styleSheet);
+
+        // Character data
+        const characters = {
+            android18: { name: "Android 18", tone: "sassy", persona: "A tough, cool android with a sharp wit." },
+            bulma: { name: "Bulma", tone: "playful", persona: "A smart, cute inventor with a witty streak." },
+            chichi: { name: "Chi-Chi", tone: "bold", persona: "A fiery, strong martial artist with a fierce attitude." },
+            videl: { name: "Videl", tone: "confident", persona: "A bold, tough fighter with a cool edge." },
+            nami: { name: "Nami", tone: "teasing", persona: "A clever, sly navigator with a cute charm." },
+            boa: { name: "Boa Hancock", tone: "haughty", persona: "A beautiful, regal pirate empress with a grand presence." },
+            robin: { name: "Nico Robin", tone: "mysterious", persona: "A calm, smart archaeologist with a deep allure." },
+            jesse: { name: "Jesse the Farmer", tone: "flirty", persona: "A sassy, fun farmer with a wild side." }
+        };
+
+        // Chat setup
+        const chatDisplay = document.getElementById('chat-display');
+        const userInput = document.getElementById('user-input');
+        let selectedCharacter = null;
+        let isNSFW = false;
+        let conversationHistory = [];
+
+        // Hugging Face API call with your token
+        async function generateAIResponse(character, message) {
+            const charData = characters[character];
+            const prompt = `${charData.name} (${charData.persona}${isNSFW ? ", flirty and bold" : ""}): ${message}\nRespond in character:`;
+            const API_TOKEN = "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";
+
+            try {
+                const response = await fetch("https://api-inference.huggingface.co/models/openai-community/gpt2", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${API_TOKEN}`
+                    },
+                    body: JSON.stringify({
+                        inputs: prompt,
+                        parameters: { max_length: 100, temperature: 0.7, top_p: 0.9, return_full_text: false }
+                    })
+                });
+
+                const data = await response.json();
+                if (data && data[0] && data[0].generated_text) {
+                    let reply = data[0].generated_text.trim();
+                    return reply.split("\n")[0]; // Take first line for brevity
+                } else {
+                    throw new Error("No response from API");
+                }
+            } catch (error) {
+                console.error("API Error:", error);
+                return `${charData.name}: Hmm, I’m feeling ${charData.tone} today—say that again?`; // Fallback
+            }
+        }
+
+        // Chatbot logic
+        function selectCharacter(character) {
+            selectedCharacter = character;
+            conversationHistory = [];
+            chatDisplay.innerHTML = `<div class="chat-message bot-message">${characters[character].name}: Hey, I’m ${characters[character].name}. What’s up?</div>`;
+        }
+
+        function toggleNSFW() {
+            isNSFW = !isNSFW;
+            document.getElementById('nsfw-toggle').innerText = `NSFW (${isNSFW ? 'On' : 'Off'})`;
+            if (selectedCharacter) {
+                chatDisplay.innerHTML += `<div class="chat-message">NSFW mode ${isNSFW ? 'on' : 'off'}.</div>`;
+            }
+        }
+
+        async function sendMessage() {
+            const message = userInput.value.trim();
+            if (!message) {
+                alert("Type something!");
+                return;
+            }
+            if (!selectedCharacter) {
+                alert("Pick a character first!");
+                return;
+            }
+
+            chatDisplay.innerHTML += `<div class="chat-message user-message">You: ${message}</div>`;
+            conversationHistory.push({ role: "user", content: message });
+
+            const response = await generateAIResponse(selectedCharacter, message);
+            chatDisplay.innerHTML += `<div class="chat-message bot-message">${characters[selectedCharacter].name}: ${response}</div>`;
+            conversationHistory.push({ role: "bot", content: response });
+            chatDisplay.scrollTop = chatDisplay.scrollHeight;
+
+            userInput.value = '';
+        }
+
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
+</body>
+</html>
