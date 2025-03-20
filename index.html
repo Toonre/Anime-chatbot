@@ -59,7 +59,9 @@
         <div id="flirty-game-content">
             <h2>Flirty Clicker Game</h2>
             <div id="flirty-game-display">
-                <video id="flirty-game-video" loop muted playsinline style="width: 100%; max-width: 200px; border-radius: 10px; border: 2px solid #ff6f61;"></video>
+                <video id="flirty-game-video" loop muted playsinline style="width: 100%; max-width: 200px; border-radius: 10px; border: 2px solid #ff6f61;">
+                    <img id="flirty-game-fallback" src="" alt="Character Fallback" style="display: none; width: 100%; max-width: 200px; border-radius: 10px; border: 2px solid #ff6f61;">
+                </video>
                 <p id="flirty-game-message">Click to start flirting!</p>
             </div>
             <div id="flirty-game-stats">
@@ -520,7 +522,7 @@
                     ],
                     greeting: "Tch, so you picked me, huh? What do you want, Android 18 doesn’t have all day!",
                     avatar: "https://via.placeholder.com/50?text=A18",
-                    flirtyVideo: "https://ahrimp4.rule34.xxx//images/3607/f9459e8b5bdc0414a287848647ffc9b2.mp4?6847792", // Test with a real MP4 URL
+                    flirtyVideo: "https://ahrimp4.rule34.xxx/images/3607/f9459e8b5bdc0414a287848647ffc9b2.mp4?6847792",
                     flirtyGame: {
                         low: "Android 18 smirks, crossing her arms. ‘Oh, you wanna flirt, huh? Let’s see if you can keep up with me!’",
                         mid: "Android 18 steps closer, her voice teasing. ‘Not bad—you’ve got some moves! How about we heat things up a bit?’",
@@ -545,7 +547,7 @@
                     ],
                     greeting: "Hehe, hi there! I’m Bulma—what kind of fun are we having today?",
                     avatar: "https://via.placeholder.com/50?text=Bulma",
-                    flirtyVideo: "https://ahrimp4.rule34.xxx//images/6019/8017411ec7e5107eb5cb9334c712a15a.mp4?6849325", // Replace with real URL
+                    flirtyVideo: "https://ahrimp4.rule34.xxx/images/5329/984086c73c9ec2a09cf7c88429fde4d8.mp4?6072343",
                     flirtyGame: {
                         low: "Bulma twirls her hair, giggling. ‘Oh, you’re a flirt, huh? Let’s see if you can handle my charm!’",
                         mid: "Bulma winks, leaning in. ‘Mmm, you’re good at this! How about we make things a little more exciting?’",
@@ -570,7 +572,7 @@
                     ],
                     greeting: "Hmph, I’m Chi-Chi! You’d better have something interesting to say—what’s up?",
                     avatar: "https://via.placeholder.com/50?text=ChiChi",
-                    flirtyVideo: "https://ahrimp4.rule34.xxx//images/5329/984086c73c9ec2a09cf7c88429fde4d8.mp4?6072343", // Replace with real URL
+                    flirtyVideo: "https://ahrimp4.rule34.xxx/images/6019/8017411ec7e5107eb5cb9334c712a15a.mp4?6849325",
                     flirtyGame: {
                         low: "Chi-Chi smirks, her eyes fiery. ‘You wanna flirt with me, huh? Let’s see if you can handle my strength!’",
                         mid: "Chi-Chi grabs your hand, grinning. ‘Not bad! Let’s get a little closer and see what you’ve got!’",
@@ -594,8 +596,8 @@
                         "User: You’re awesome! Videl: Heh, I know I am! But what about you—got any skills to impress me with?"
                     ],
                     greeting: "Hey, I’m Videl. I’m the best around—so what’s on your mind?",
-                    avatar: "",
-                    flirtyVideo: "https://ahri2mp4.rule34.xxx//images/6019/80912ee2e419b3f390f17ec9c02e7b7c.mp4?6849401", // Replace with real URL
+                    avatar: "https://via.placeholder.com/50?text=Videl",
+                    flirtyVideo: "https://ahri2mp4.rule34.xxx/images/6019/80912ee2e419b3f390f17ec9c02e7b7c.mp4?6849401",
                     flirtyGame: {
                         low: "Videl grins, stepping closer. ‘You wanna flirt, huh? Let’s see if you can keep up with me!’",
                         mid: "Videl nudges you playfully. ‘Not bad at all! Let’s make things a bit more exciting, shall we?’",
@@ -730,6 +732,7 @@
             const flirtyGameButton = document.getElementById('flirty-game-button');
             const flirtyGameModal = document.getElementById('flirty-game-modal');
             const flirtyGameVideo = document.getElementById('flirty-game-video');
+            const flirtyGameFallback = document.getElementById('flirty-game-fallback');
             const flirtyGameMessage = document.getElementById('flirty-game-message');
             const flirtPointsDisplay = document.getElementById('flirt-points');
             const flirtHighScoreDisplay = document.getElementById('flirt-high-score');
@@ -914,13 +917,23 @@ Conversation history:
                 lastClickTime = null;
                 const char = characters[selectedCharacter];
                 flirtyGameVideo.src = char.flirtyVideo;
+                flirtyGameFallback.src = char.avatar; // Set fallback image to character's avatar
+                flirtyGameFallback.style.display = 'none'; // Hide fallback initially
                 flirtyGameVideo.play().catch(error => {
                     console.error(`Failed to play video for ${char.name}:`, error);
-                    flirtyGameMessage.textContent = "Video failed to load. Please try again later.";
+                    flirtyGameMessage.textContent = "Video failed to load. Showing image instead.";
+                    flirtyGameVideo.style.display = 'none';
+                    flirtyGameFallback.style.display = 'block';
                 });
                 flirtyGameVideo.addEventListener('error', (e) => {
                     console.error(`Video error for ${char.name}:`, e);
-                    flirtyGameMessage.textContent = "Video failed to load. Please check the URL.";
+                    flirtyGameMessage.textContent = "Video failed to load. Showing image instead.";
+                    flirtyGameVideo.style.display = 'none';
+                    flirtyGameFallback.style.display = 'block';
+                });
+                flirtyGameVideo.addEventListener('loadeddata', () => {
+                    flirtyGameVideo.style.display = 'block';
+                    flirtyGameFallback.style.display = 'none';
                 });
                 flirtyGameVideo.playbackRate = 1.0; // Default speed
                 flirtyGameMessage.textContent = "Click to start flirting!";
@@ -1001,6 +1014,8 @@ Conversation history:
                 flirtyGameVideo.pause();
                 flirtyGameVideo.currentTime = 0;
                 flirtyGameVideo.playbackRate = 1.0;
+                flirtyGameVideo.style.display = 'block';
+                flirtyGameFallback.style.display = 'none';
             });
 
             // Character creator modal
